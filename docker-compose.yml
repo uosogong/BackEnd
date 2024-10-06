@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  postgres-server:
+    image: postgres
+    restart: always
+    container_name: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: sogoing_server
+      POSTGRES_PASSWORD: sogoing_server
+      POSTGRES_DB: sogoing_server
+
+  sogoing-server:
+    build: .
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-server:5432/rebuild_server
+    depends_on:
+      - postgres-server
