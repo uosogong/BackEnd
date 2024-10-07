@@ -33,16 +33,6 @@ jobs:
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@417ae3ccd767c252f5661f1ace9f835f9654f2b5
 
-    - name: Inject Main Application Configurations
-      run: |
-        mkdir -p ./src/main/resources
-        echo "${{ env.MAIN_PROPERTIES }}" > ./src/main/resources/application.yml
-        
-    - name: Inject Test Application Configurations
-      run: |
-        mkdir -p ./src/test/resources
-        echo "${{ env.TEST_PROPERTIES }}" > ./src/test/resources/application.yml
-
     - name: Build with Gradle Wrapper
       run: ./gradlew build -x test
 
