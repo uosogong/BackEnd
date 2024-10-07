@@ -13,10 +13,10 @@ services:
       POSTGRES_DB: sogoing_server
 
   sogoing-server:
-    build: .
+    image: 
     ports:
       - "8081:8081"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-server:5432/rebuild_server
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-server:5432/sogoing_server
     depends_on:
       - postgres-server
