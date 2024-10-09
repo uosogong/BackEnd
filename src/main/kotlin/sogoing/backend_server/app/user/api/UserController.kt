@@ -9,6 +9,6 @@ class UserController {
 
   @GetMapping("/{test}")
   fun testCall(@PathVariable test: String): String {
-    return "success - $test"
+    return "success ver 2 - $test"
   }
 }
