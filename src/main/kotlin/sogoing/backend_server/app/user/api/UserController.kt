@@ -8,6 +8,6 @@ class UserController {
 
   @GetMapping("/")
   fun testCall(): String {
-    return "success"
+    return "success - 2"
   }
 }
