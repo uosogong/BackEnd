@@ -1,4 +1,4 @@
-package sogoing.backend_server.common
+package sogoing.backend_server.common.config
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -11,11 +11,11 @@ import org.springframework.security.web.SecurityFilterChain
 @EnableWebSecurity
 class SecurityConfig {
     @Bean
-    fun filterChain(http : HttpSecurity):SecurityFilterChain {
+    fun filterChain(http: HttpSecurity): SecurityFilterChain {
         http
             .httpBasic { httpBasic -> httpBasic.disable() }
             .csrf { csrf -> csrf.disable() }
-            //.addFilterBefore()
+        //.addFilterBefore()
         return http.build()
     }
 }

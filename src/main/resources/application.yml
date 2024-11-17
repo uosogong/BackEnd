@@ -9,18 +9,21 @@ spring:
     driver-class-name: org.postgresql.Driver
     hikari:
       initialization-fail-timeout: 3600
+
   jpa:
     hibernate:
       ddl-auto: create
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
-    generate-ddl: false
+    generate-ddl: true
     open-in-view: false
     properties:
       hibernate:
         default_batch_fetch_size: 1000
-        show_sql: false
+        show_sql: true
         format_sql: true
 
-
-
-
+logging:
+  level:
+    org.hibernate.SQL: DEBUG  # Hibernate의 SQL 쿼리 출력
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE  # 바인딩된 파라미터 출력
+    org.springframework.orm.jpa: DEBUG  # JPA 관련 로깅
+    org.springframework.data.jpa.repository.config: DEBUG  # Spring Data JPA 관련 로깅
