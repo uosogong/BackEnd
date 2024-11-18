@@ -12,8 +12,8 @@ import java.time.LocalDateTime
 @EntityListeners(AuditingEntityListener::class)
 abstract class SoftDeleteEntity(
     @CreatedDate
-    @Column(name = "created_at", updatable = false)
+    @Column(name = "created_date", updatable = false)
     var createdDate: LocalDateTime? = null,
-    @LastModifiedDate @Column(name = "updated_at") var updatedDate: LocalDateTime? = null,
-    @Column(name = "deleted_at") var deletedDate: LocalDateTime? = null,
+    @LastModifiedDate @Column(name = "updated_date") var updatedDate: LocalDateTime? = null,
+    @Column(name = "deleted_date") var deletedDate: LocalDateTime? = null,
 )

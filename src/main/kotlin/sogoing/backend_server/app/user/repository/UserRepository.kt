@@ -1,7 +1,7 @@
 package sogoing.backend_server.app.user.repository
 
-import User
 import org.springframework.data.jpa.repository.JpaRepository
+import sogoing.backend_server.app.user.entity.User
 
 interface UserRepository : JpaRepository<User, Long> {
 }

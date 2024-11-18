@@ -1,8 +1,14 @@
+package sogoing.backend_server.app.department.entity
+
 import com.uoslife.common.entity.BaseEntity
 import jakarta.persistence.*
+import sogoing.backend_server.app.dib.entity.Dib
+import sogoing.backend_server.app.feedback.entity.Feedback
+import sogoing.backend_server.app.resume.entity.Resume
+import sogoing.backend_server.app.user.entity.User
 
 @Entity
-@Table(name = "department")
+@Table(name = "departments")
 class Department(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

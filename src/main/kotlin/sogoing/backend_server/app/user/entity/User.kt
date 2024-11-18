@@ -1,16 +1,17 @@
+package sogoing.backend_server.app.user.entity
+
 import com.uoslife.common.entity.SoftDeleteEntity
 import jakarta.persistence.*
+import sogoing.backend_server.app.department.entity.Department
+import sogoing.backend_server.app.feedback.entity.Feedback
+import sogoing.backend_server.app.resume.entity.Resume
 
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 class User(
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long? = null,
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) var id: Long? = null,
 
-    @ManyToOne
-    @JoinColumn(name = "department_id", nullable = false)
-    var department: Department? = null,
+    @ManyToOne @JoinColumn(name = "department_id", nullable = false) var department: Department,
 
     var phoneNumber: String? = null,
 
@@ -30,10 +31,7 @@ class User(
 
     var password: String? = null,
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    var resumes: List<Resume> = mutableListOf(),
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY) var resumes: List<Resume> = mutableListOf(),
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    var feedbacks: List<Feedback> = mutableListOf(),
-
-    ) : SoftDeleteEntity()
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY) var feedbacks: List<Feedback> = mutableListOf(),
+) : SoftDeleteEntity()

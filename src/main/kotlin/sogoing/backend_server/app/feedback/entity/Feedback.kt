@@ -1,8 +1,12 @@
+package sogoing.backend_server.app.feedback.entity
+
 import com.uoslife.common.entity.BaseEntity
 import jakarta.persistence.*
+import sogoing.backend_server.app.department.entity.Department
+import sogoing.backend_server.app.user.entity.User
 
 @Entity
-@Table(name = "feedback")
+@Table(name = "feedbacks")
 class Feedback(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
