@@ -8,7 +8,4 @@ import jakarta.persistence.Table
 
 @Entity
 @Table(name = "users")
-class User {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id:Long ?= null
-}
+class User(@Id @GeneratedValue(strategy = GenerationType.IDENTITY) val id: Long? = null)
