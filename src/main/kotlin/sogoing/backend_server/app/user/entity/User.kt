@@ -10,7 +10,9 @@ import sogoing.backend_server.app.resume.entity.Resume
 @Table(name = "users")
 class User(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) var id: Long? = null,
-    @ManyToOne @JoinColumn(name = "department_id", nullable = false) var department: Department?=null,
+    @ManyToOne
+    @JoinColumn(name = "department_id", nullable = false)
+    var department: Department? = null,
     var phoneNumber: String? = null,
     var address: String? = null,
     var role: String? = null,
