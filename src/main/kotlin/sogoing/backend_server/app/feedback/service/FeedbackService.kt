@@ -56,8 +56,8 @@ class FeedbackService(
     }
 
     private fun getUniqueFeedback(userId: Long, departmentId: Long?): Feedback? {
-        val department = Department(userId)
-        val user = User(departmentId)
+        val department = Department(departmentId)
+        val user = User(userId)
         return feedbackRepository.findByDepartmentAndUser(department, user)
     }
 
