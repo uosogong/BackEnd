@@ -16,4 +16,4 @@ class Feedback(
     @JoinColumn(name = "department_id")
     var department: Department,
     @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "user_id") var user: User
-):BaseEntity()
+) : BaseEntity()
