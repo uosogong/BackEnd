@@ -5,6 +5,7 @@ plugins {
 	id("io.spring.dependency-management") version "1.1.6"
 	id("org.asciidoctor.jvm.convert") version "3.3.2"
 	kotlin("plugin.jpa") version "1.9.25"
+	id("com.diffplug.spotless") version("6.21.0")
 }
 
 group = "sogoing"
@@ -37,6 +38,10 @@ dependencies {
 
 	// Dotenv
 	implementation("me.paulschwarz:spring-dotenv:4.0.0")
+
+
+
+
 }
 
 kotlin {
@@ -56,4 +61,10 @@ tasks.test {
 tasks.asciidoctor {
 	inputs.dir(project.extra["snippetsDir"]!!)
 	dependsOn(tasks.test)
+}
+
+spotless {
+	kotlin {
+		ktfmt().kotlinlangStyle()
+	}
 }
