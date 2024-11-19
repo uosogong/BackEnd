@@ -1,21 +1,40 @@
 package sogoing.backend_server.app.department.entity
 
-import jakarta.persistence.Entity
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
-import jakarta.persistence.Id
-import jakarta.persistence.OneToMany
+import com.uoslife.common.entity.BaseEntity
+import jakarta.persistence.*
+import sogoing.backend_server.app.dib.entity.Dib
+import sogoing.backend_server.app.feedback.entity.Feedback
 import sogoing.backend_server.app.resume.entity.Resume
-import sogoing.backend_server.common.entity.UpdateTimeEntity
+import sogoing.backend_server.app.user.entity.User
 
 @Entity
+@Table(name = "departments")
 class Department(
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) val id: Long? = null,
-    var departmentName: String? = null,
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    var id: Long? = null,
+
+    var name: String? = null,
+
     var message: String? = null,
-    var schedule: String? = null,
-    var scholarshipRecruitment: Boolean? = null,
-    var internRecruitment: Boolean? = null,
+
     var introduction: String? = null,
-    @OneToMany(mappedBy = "department") val resumes: MutableList<Resume>? = mutableListOf()
-) : UpdateTimeEntity()
+
+    var schedule: String? = null,
+
+    var scholarshipRecruitment: Boolean? = null,
+
+    var internRecruitment: Boolean? = null,
+
+    @OneToMany(mappedBy = "department", fetch = FetchType.LAZY)
+    var users: List<User> = mutableListOf(),
+
+    @OneToMany(mappedBy = "department", fetch = FetchType.LAZY)
+    var dibs: List<Dib> = mutableListOf(),
+
+    @OneToMany(mappedBy = "department", fetch = FetchType.LAZY)
+    var resumes: List<Resume> = mutableListOf(),
+
+    @OneToMany(mappedBy = "department", fetch = FetchType.LAZY)
+    var feedbacks: List<Feedback> = mutableListOf()
+) : BaseEntity()
