@@ -20,3 +20,11 @@ spring:
         default_batch_fetch_size: 1000
         show_sql: true
         format_sql: true
+
+jwt:
+  access:
+    secret: ${JWT_ACCESS_SECRET}
+    expiration: 600
+  refresh:
+    secret: ${JWT_REFRESH_SECRET}
+    expiration: 1209600000
