@@ -1,10 +1,11 @@
 plugins {
-    kotlin("jvm") version "1.9.25"
-    kotlin("plugin.spring") version "1.9.25"
-    id("org.springframework.boot") version "3.3.4"
-    id("io.spring.dependency-management") version "1.1.6"
-    id("org.asciidoctor.jvm.convert") version "3.3.2"
-    kotlin("plugin.jpa") version "1.9.25"
+	kotlin("jvm") version "1.9.25"
+	kotlin("plugin.spring") version "1.9.25"
+	id("org.springframework.boot") version "3.3.4"
+	id("io.spring.dependency-management") version "1.1.6"
+	id("org.asciidoctor.jvm.convert") version "3.3.2"
+	kotlin("plugin.jpa") version "1.9.25"
+	id("com.diffplug.spotless") version("6.21.0")
 }
 
 group = "sogoing"
@@ -64,4 +65,10 @@ tasks.test {
 tasks.asciidoctor {
     inputs.dir(project.extra["snippetsDir"]!!)
     dependsOn(tasks.test)
+}
+
+spotless {
+	kotlin {
+		ktfmt().kotlinlangStyle()
+	}
 }

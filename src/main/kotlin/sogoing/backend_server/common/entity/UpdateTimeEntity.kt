@@ -1,4 +1,4 @@
-package com.uoslife.common.entity
+package sogoing.backend_server.common.entity
 
 import jakarta.persistence.Column
 import jakarta.persistence.EntityListeners
@@ -10,10 +10,9 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener
 
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener::class)
-abstract class SoftDeleteEntity(
+abstract class UpdateTimeEntity(
     @CreatedDate
-    @Column(name = "created_date", updatable = false)
-    var createdDate: LocalDateTime? = null,
-    @LastModifiedDate @Column(name = "updated_date") var updatedDate: LocalDateTime? = null,
-    @Column(name = "deleted_date") var deletedDate: LocalDateTime? = null,
+    @Column(name = "created_at", updatable = false)
+    var createdAt: LocalDateTime? = null,
+    @LastModifiedDate @Column(name = "updated_at") var updatedAt: LocalDateTime? = null,
 )

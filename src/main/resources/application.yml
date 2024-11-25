@@ -9,7 +9,6 @@ spring:
     driver-class-name: org.postgresql.Driver
     hikari:
       initialization-fail-timeout: 3600
-
   jpa:
     hibernate:
       ddl-auto: create
@@ -18,9 +17,8 @@ spring:
     properties:
       hibernate:
         default_batch_fetch_size: 1000
-        show_sql: true
+        show_sql: false
         format_sql: true
-
 jwt:
   access:
     secret: ${JWT_ACCESS_SECRET}
@@ -28,3 +26,8 @@ jwt:
   refresh:
     secret: ${JWT_REFRESH_SECRET}
     expiration: 1209600000
+    
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
