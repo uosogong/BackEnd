@@ -2,17 +2,15 @@ package sogoing.backend_server.app.auth
 
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
-import org.springframework.beans.factory.annotation.Value
-import org.springframework.stereotype.Service
 import java.sql.Date
 import java.time.Instant
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.stereotype.Service
 
 @Service
 class TokenProvider(
-    @Value("\${jwt.access.secret}")
-    private val accessSecret: String,
-    @Value("\${jwt.access.expiration}")
-    private val expirationHours: Long,
+    @Value("\${jwt.access.secret}") private val accessSecret: String,
+    @Value("\${jwt.access.expiration}") private val expirationHours: Long,
 ) {
     private val signingKey = Keys.hmacShaKeyFor(accessSecret.toByteArray())
 
@@ -29,11 +27,6 @@ class TokenProvider(
     }
 
     fun validateTokenAndGetSubject(token: String?): String? {
-        return Jwts.parser()
-            .verifyWith(signingKey)
-            .build()
-            .parseSignedClaims(token)
-            .payload
-            .subject
+        return Jwts.parser().verifyWith(signingKey).build().parseSignedClaims(token).payload.subject
     }
 }

@@ -6,10 +6,10 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import sogoing.backend_server.common.error.ApiResponse
 import sogoing.backend_server.app.auth.dto.SignInRequest
 import sogoing.backend_server.app.auth.dto.SignUpRequest
 import sogoing.backend_server.app.auth.service.AuthService
+import sogoing.backend_server.common.error.ApiResponse
 
 @Tag(name = "회원 가입 및 로그인 API")
 @RestController

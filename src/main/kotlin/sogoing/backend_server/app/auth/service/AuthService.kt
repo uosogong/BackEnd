@@ -31,7 +31,6 @@ class AuthService(
         return signResponse(user)
     }
 
-
     @Transactional
     fun signIn(request: SignInRequest): SignResponse {
         val user = userRepository.findByEmail(request.email) ?: throw NotFoundException()

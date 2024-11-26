@@ -9,9 +9,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.web.AuthenticationEntryPoint
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter
 import sogoing.backend_server.app.auth.JwtAuthenticationFilter
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
-import org.springframework.security.web.SecurityFilterChain
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 
 @EnableMethodSecurity
 @Configuration
@@ -22,18 +19,17 @@ class SecurityConfig(
     private val allowedUris = arrayOf("/signup", "/signin")
 
     @Bean
-    fun filterChain(http: HttpSecurity) = http
-        .csrf { it.disable() }
-        .headers { it.frameOptions { frameOptions -> frameOptions.sameOrigin() } }
-        .authorizeHttpRequests {
-            it.requestMatchers(*allowedUris).permitAll()
-                .anyRequest().authenticated()
-        }
-        .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
-        .addFilterBefore(jwtAuthenticationFilter, BasicAuthenticationFilter::class.java)
-        .exceptionHandling { it.authenticationEntryPoint(entryPoint) }
-        .build()!!
+    fun filterChain(http: HttpSecurity) =
+        http
+            .csrf { it.disable() }
+            .headers { it.frameOptions { frameOptions -> frameOptions.sameOrigin() } }
+            .authorizeHttpRequests {
+                it.requestMatchers(*allowedUris).permitAll().anyRequest().authenticated()
+            }
+            .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
+            .addFilterBefore(jwtAuthenticationFilter, BasicAuthenticationFilter::class.java)
+            .exceptionHandling { it.authenticationEntryPoint(entryPoint) }
+            .build()!!
 
-    @Bean
-    fun passwordEncoder() = BCryptPasswordEncoder()
+    @Bean fun passwordEncoder() = BCryptPasswordEncoder()
 }

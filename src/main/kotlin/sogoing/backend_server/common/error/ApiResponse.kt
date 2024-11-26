@@ -1,6 +1,5 @@
 package sogoing.backend_server.common.error
 
-
 data class ApiResponse(
     val message: Any,
     val status: ApiStatus,
@@ -12,7 +11,11 @@ data class ApiResponse(
         }
 
         fun error(errorCode: ErrorCode): ApiResponse {
-            return ApiResponse(status = ApiStatus.ERROR, message = errorCode.message, code = errorCode.code)
+            return ApiResponse(
+                status = ApiStatus.ERROR,
+                message = errorCode.message,
+                code = errorCode.code
+            )
         }
     }
 }

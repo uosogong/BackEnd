@@ -34,13 +34,15 @@ class JwtAuthenticationFilter(private val tokenProvider: TokenProvider) : OncePe
         filterChain.doFilter(request, response)
     }
 
-    private fun parseBearerToken(request: HttpServletRequest) = request.getHeader(HttpHeaders.AUTHORIZATION)
-        .takeIf { it?.startsWith("Bearer ", true) ?: false }?.substring(7)
+    private fun parseBearerToken(request: HttpServletRequest) =
+        request
+            .getHeader(HttpHeaders.AUTHORIZATION)
+            .takeIf { it?.startsWith("Bearer ", true) ?: false }
+            ?.substring(7)
 
-    private fun parseUserSpecification(token: String?) = (
-            token?.takeIf { it.length >= 10 }
-                ?.let { tokenProvider.validateTokenAndGetSubject(it) }
-                ?: "anonymous:anonymous"
-            ).split(":")
-        .let { User(it[0], "", listOf(SimpleGrantedAuthority(it[1]))) }
+    private fun parseUserSpecification(token: String?) =
+        (token?.takeIf { it.length >= 10 }?.let { tokenProvider.validateTokenAndGetSubject(it) }
+                ?: "anonymous:anonymous")
+            .split(":")
+            .let { User(it[0], "", listOf(SimpleGrantedAuthority(it[1]))) }
 }

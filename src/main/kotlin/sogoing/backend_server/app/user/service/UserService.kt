@@ -9,7 +9,6 @@ import sogoing.backend_server.app.user.dto.UserProfile
 import sogoing.backend_server.app.user.dto.UserUpdateRequest
 import sogoing.backend_server.app.user.repository.UserRepository
 
-
 @Service
 class UserService(
     private val userRepository: UserRepository,
@@ -31,9 +30,9 @@ class UserService(
             email = updateRequest.email ?: email
             phone = updateRequest.phone ?: phone
             studentId = updateRequest.studentId ?: studentId
-            department = updateRequest.departmentName?.let {
-                departmentService.getDepartmentByName(it)
-            } ?: department
+            department =
+                updateRequest.departmentName?.let { departmentService.getDepartmentByName(it) }
+                    ?: department
             schedule = updateRequest.schedule ?: schedule
         }
 

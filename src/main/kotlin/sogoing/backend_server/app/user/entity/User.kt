@@ -16,27 +16,27 @@ class User(
     @ManyToOne
     @JoinColumn(name = "department_id", nullable = false)
     var department: Department? = null,
-    var phoneNumber: String? = null,
+    var phone: String? = null,
     var address: String? = null,
-    var role: String? = null,
+    @Enumerated(EnumType.STRING) var role: UserRole? = null,
     var workplace: String? = null,
     var name: String? = null,
     var schedule: String? = null,
     var studentId: String? = null,
-    @Email
-    var email: String? = null,
+    @Email var email: String? = null,
     var password: String? = null,
-  
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY) var resumes: List<Resume> = mutableListOf(),
-
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY) var feedbacks: List<Feedback> = mutableListOf(),
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    var resumes: List<Resume> = mutableListOf(),
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    var feedbacks: List<Feedback> = mutableListOf(),
 ) : SoftDeleteEntity() {
     companion object {
-        fun from(request: SignUpRequest, encoder: PasswordEncoder) = User(
-            name = request.name,
-            email = request.email,
-            password = encoder.encode(request.password),
-        )
+        fun from(request: SignUpRequest, encoder: PasswordEncoder) =
+            User(
+                name = request.name,
+                email = request.email,
+                password = encoder.encode(request.password),
+            )
     }
 
     @PrePersist
