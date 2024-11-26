@@ -13,9 +13,7 @@ import sogoing.backend_server.app.resume.entity.Resume
 @Table(name = "users")
 class User(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) var id: Long? = null,
-    @ManyToOne
-    @JoinColumn(name = "department_id", nullable = false)
-    var department: Department? = null,
+    @ManyToOne @JoinColumn(name = "department_id") var department: Department? = null,
     var phone: String? = null,
     var address: String? = null,
     @Enumerated(EnumType.STRING) var role: UserRole? = null,
@@ -26,9 +24,9 @@ class User(
     @Email var email: String? = null,
     var password: String? = null,
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    var resumes: List<Resume> = mutableListOf(),
+    var resumes: MutableList<Resume> = mutableListOf(),
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    var feedbacks: List<Feedback> = mutableListOf(),
+    var feedbacks: MutableList<Feedback> = mutableListOf(),
 ) : SoftDeleteEntity() {
     companion object {
         fun from(request: SignUpRequest, encoder: PasswordEncoder) =
