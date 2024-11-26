@@ -36,19 +36,6 @@ jobs:
     - name: Build with Gradle Wrapper
       run: ./gradlew build -x test
 
-    - name: Parse Secrets and Create application.yml
-      run: |
-        # Create .env file
-        echo "${{ secrets.ENV_CONTENT }}" > .env
-
-        # Source .env to set environment variables
-        set -a
-        source .env
-        set +a
-
-        # Replace placeholders in APPLICATION_YML_TEMPLATE with environment variables
-        echo "${{ secrets.APPLICATION_YML_TEMPLATE }}" | envsubst > src/main/resources/application.yml
-
     - name: Docker build & push to Docker hub
       run: |
         docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
@@ -62,9 +49,13 @@ jobs:
         username: ec2-user
         key: ${{ secrets.EC2_PRIVATE_KEY }}
         script: |
+          # SSH commands to deploy to EC2
           sudo docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
           sudo docker rm -f $(sudo docker ps -qa)
           sudo docker rmi ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}
           sudo docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}
-          sudo docker-compose up -d
+          
+          # Set up environment variables and run docker-compose
+          echo "${{ secrets.ENV_CONTENT }}" > .env
+          sudo docker-compose --env-file .env up -d
           sudo docker image prune -f
