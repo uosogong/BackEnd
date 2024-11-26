@@ -7,13 +7,13 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
     permissions:
       contents: read
 
     steps:
     - uses: actions/checkout@v4
+
     - name: Set up JDK 17
       uses: actions/setup-java@v4
       with:
@@ -29,12 +29,25 @@ jobs:
         key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
         restore-keys: |
           ${{ runner.os }}-gradle-
-          
+
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@417ae3ccd767c252f5661f1ace9f835f9654f2b5
 
     - name: Build with Gradle Wrapper
       run: ./gradlew build -x test
+
+    - name: Parse Secrets and Create application.yml
+      run: |
+        # Create .env file
+        echo "${{ secrets.ENV_CONTENT }}" > .env
+
+        # Source .env to set environment variables
+        set -a
+        source .env
+        set +a
+
+        # Replace placeholders in APPLICATION_YML_TEMPLATE with environment variables
+        echo "${{ secrets.APPLICATION_YML_TEMPLATE }}" | envsubst > src/main/resources/application.yml
 
     - name: Docker build & push to Docker hub
       run: |
@@ -49,9 +62,9 @@ jobs:
         username: ec2-user
         key: ${{ secrets.EC2_PRIVATE_KEY }}
         script: |
-            sudo docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-            sudo docker rm -f $(sudo docker ps -qa)
-            sudo docker rmi ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}
-            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}
-            sudo docker-compose up -d
-            sudo docker image prune -f
+          sudo docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+          sudo docker rm -f $(sudo docker ps -qa)
+          sudo docker rmi ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}
+          sudo docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}
+          sudo docker-compose up -d
+          sudo docker image prune -f
