@@ -13,7 +13,8 @@ import sogoing.backend_server.common.error.exception.AccessDeniedException
 class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception::class)
-    protected fun handleException(exception: Exception): ResponseEntity<ApiResponse> {
+    fun handleException(exception: Exception): ResponseEntity<ApiResponse> {
+        println(exception.message)
         val errorCode = ErrorCode.INTERNAL_SERVER_ERROR
         return createErrorResponse(errorCode)
     }

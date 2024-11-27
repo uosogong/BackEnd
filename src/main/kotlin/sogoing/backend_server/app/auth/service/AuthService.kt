@@ -1,9 +1,9 @@
 package sogoing.backend_server.app.auth.service
 
-import jakarta.transaction.Transactional
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import sogoing.backend_server.app.auth.TokenProvider
 import sogoing.backend_server.app.auth.dto.SignInRequest
 import sogoing.backend_server.app.auth.dto.SignResponse
@@ -13,12 +13,13 @@ import sogoing.backend_server.app.user.repository.UserRepository
 import sogoing.backend_server.common.error.exception.user.UserEmailAlreadyExistingException
 
 @Service
+@Transactional
 class AuthService(
     private val userRepository: UserRepository,
     private val encoder: PasswordEncoder,
     private val tokenProvider: TokenProvider
 ) {
-    @Transactional
+
     fun signUp(request: SignUpRequest): SignResponse {
 
         if (userRepository.existsByEmail(request.email)) {
@@ -31,7 +32,6 @@ class AuthService(
         return signResponse(user)
     }
 
-    @Transactional
     fun signIn(request: SignInRequest): SignResponse {
         val user = userRepository.findByEmail(request.email) ?: throw NotFoundException()
         if (encoder.matches(request.password, user.password)) {

@@ -16,7 +16,7 @@ class User(
     @OneToOne(mappedBy = "user", fetch = FetchType.LAZY) var department: Department? = null,
     var phoneNumber: String? = null,
     var address: String? = null,
-    var role: UserRole? = null,
+    @Enumerated(EnumType.STRING) var role: UserRole? = null,
     var workplace: String? = null,
     var name: String? = null,
     var schedule: String? = null,

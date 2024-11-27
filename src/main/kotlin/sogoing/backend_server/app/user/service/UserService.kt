@@ -1,26 +1,25 @@
 package sogoing.backend_server.app.user.service
 
-import jakarta.transaction.Transactional
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import sogoing.backend_server.app.department.service.DepartmentService
 import sogoing.backend_server.app.user.dto.UserProfile
 import sogoing.backend_server.app.user.dto.UserUpdateRequest
 import sogoing.backend_server.app.user.repository.UserRepository
 
 @Service
+@Transactional
 class UserService(
     private val userRepository: UserRepository,
     private val departmentService: DepartmentService
 ) {
-    @Transactional
     fun getProfile(userId: Long): UserProfile {
         val user = userRepository.findByIdOrNull(userId) ?: throw NotFoundException()
         return UserProfile.from(user)
     }
 
-    @Transactional
     fun updateProfile(userId: Long, updateRequest: UserUpdateRequest): UserProfile {
         val user = userRepository.findByIdOrNull(userId) ?: throw NotFoundException()
 
