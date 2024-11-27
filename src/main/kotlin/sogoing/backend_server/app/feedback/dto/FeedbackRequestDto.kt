@@ -7,6 +7,7 @@ import sogoing.backend_server.app.user.entity.User
 class FeedbackRequestDto {
 
     data class CreateForm(
+        val departmentId: Long,
         val description: String,
         val rating: Int? = null,
         val busy: String? = null,
