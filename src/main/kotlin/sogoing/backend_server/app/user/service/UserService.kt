@@ -28,7 +28,6 @@ class UserService(
             name = updateRequest.name ?: name
             address = updateRequest.address ?: address
             email = updateRequest.email ?: email
-            phone = updateRequest.phone ?: phone
             studentId = updateRequest.studentId ?: studentId
             department =
                 updateRequest.departmentName?.let { departmentService.getDepartmentByName(it) }

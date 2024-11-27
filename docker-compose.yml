@@ -13,7 +13,7 @@ services:
       POSTGRES_DB: sogoing_server
 
   sogoing-server:
-    image: 
+    image: .
     ports:
       - "8081:8081"
     environment:
