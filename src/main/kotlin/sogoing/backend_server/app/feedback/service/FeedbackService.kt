@@ -4,7 +4,6 @@ import java.lang.IllegalStateException
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import sogoing.backend_server.app.department.entity.Department
 import sogoing.backend_server.app.department.repository.DepartmentRepository
 import sogoing.backend_server.app.feedback.dto.FeedbackRequestDto
 import sogoing.backend_server.app.feedback.dto.FeedbackResponseDto
@@ -22,7 +21,9 @@ class FeedbackService(
 ) {
     @Transactional
     fun createFeedback(createForm: FeedbackRequestDto.CreateForm, userId: Long) {
-        val department = departmentRepository.findByIdOrNull(createForm.departmentId) ?: throw IllegalStateException("부서 없음")
+        val department =
+            departmentRepository.findByIdOrNull(createForm.departmentId)
+                ?: throw IllegalStateException("부서 없음")
         val user = userRepository.findByIdOrNull(userId) ?: throw IllegalStateException("유저 없음")
 
         checkUserFeedback(user)
@@ -39,7 +40,9 @@ class FeedbackService(
     }
 
     fun findDepartmentFeedbacks(departmentId: Long?): FeedbackResponseDto.FeedbackListDto {
-        val department = departmentRepository.findByIdOrNull(departmentId) ?: throw IllegalStateException("부서 없음")
+        val department =
+            departmentRepository.findByIdOrNull(departmentId)
+                ?: throw IllegalStateException("부서 없음")
 
         val departmentFeedbacks =
             feedbackRepository.findAllByDepartment(department)
@@ -58,7 +61,9 @@ class FeedbackService(
     }
 
     private fun getUniqueFeedback(userId: Long, departmentId: Long?): Feedback? {
-        val department = departmentRepository.findByIdOrNull(departmentId) ?: throw IllegalStateException("부서 없음")
+        val department =
+            departmentRepository.findByIdOrNull(departmentId)
+                ?: throw IllegalStateException("부서 없음")
 
         val user = User(userId)
         return feedbackRepository.findByDepartmentAndUser(department, user)
