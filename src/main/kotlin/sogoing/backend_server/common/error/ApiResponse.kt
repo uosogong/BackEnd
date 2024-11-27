@@ -1,9 +1,9 @@
 package sogoing.backend_server.common.error
 
 data class ApiResponse(
-    val message: Any,
     val status: ApiStatus,
     val code: String?,
+    val message: Any,
 ) {
     companion object {
         fun success(message: Any): ApiResponse {
