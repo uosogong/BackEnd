@@ -89,7 +89,9 @@ class DepartmentService(
     }
 
     @Transactional
-    fun createDepartment(departmentCreateRequestDto: DepartmentCreateRequestDto): List<UserProfile> {
+    fun createDepartment(
+        departmentCreateRequestDto: DepartmentCreateRequestDto
+    ): List<UserProfile> {
         val departments: MutableList<Department> = mutableListOf()
         val adminUsers: MutableList<User> = mutableListOf()
         departmentCreateRequestDto.departments?.forEach { departmentDto ->
