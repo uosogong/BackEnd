@@ -34,12 +34,15 @@ class User(
                 name = request.name,
                 email = request.email,
                 password = encoder.encode(request.password),
+                role = UserRole.USER
             )
-    }
 
-    @PrePersist
-    @PreUpdate
-    fun updateRole() {
-        role = if (department == null) UserRole.USER else UserRole.ADMIN
+        fun makeAdmin(request: SignUpRequest, encoder: PasswordEncoder) =
+            User(
+                name = request.name,
+                email = request.email,
+                password = encoder.encode(request.password),
+                role = UserRole.ADMIN
+            )
     }
 }
