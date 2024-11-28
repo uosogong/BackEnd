@@ -14,11 +14,11 @@ class Department(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) var id: Long? = null,
     var name: String? = null,
     var message: String? = null,
-    var introduction: String? = null,
+    @Column(columnDefinition = "TEXT") var introduction: String? = null,
     var schedule: String? = null,
     var scholarshipRecruitment: Boolean,
-    var recruitEndDate: LocalDate?,
     var internRecruitment: Boolean,
+    var recruitEndDate: LocalDate? = null,
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     var user: User,

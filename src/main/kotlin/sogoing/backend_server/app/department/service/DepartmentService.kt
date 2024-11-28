@@ -3,17 +3,23 @@ package sogoing.backend_server.app.department.service
 import java.lang.IllegalStateException
 import org.springframework.data.crossstore.ChangeSetPersister
 import org.springframework.data.repository.findByIdOrNull
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import sogoing.backend_server.app.auth.dto.SignUpRequest
+import sogoing.backend_server.app.department.dto.request.DepartmentCreateRequestDto
 import sogoing.backend_server.app.department.dto.request.DepartmentUpdateRequestDto
 import sogoing.backend_server.app.department.dto.reseponse.*
 import sogoing.backend_server.app.department.entity.Department
 import sogoing.backend_server.app.department.repository.DepartmentRepository
+import sogoing.backend_server.app.user.dto.UserProfile
+import sogoing.backend_server.app.user.entity.User
 import sogoing.backend_server.app.user.repository.UserRepository
 
 @Service
 @Transactional(readOnly = true)
 class DepartmentService(
+    private val encoder: PasswordEncoder,
     private val departmentRepository: DepartmentRepository,
     private val userRepository: UserRepository,
 ) {
@@ -21,7 +27,7 @@ class DepartmentService(
         return departmentRepository.findByName(name) ?: throw ChangeSetPersister.NotFoundException()
     }
 
-    fun getDepartmentsBasicInfo(userId: Long): DepartmentBasicResponseDto {
+    fun getDepartmentsBasicInfo(): DepartmentBasicResponseDto {
         val departments =
             departmentRepository.findAllByOrderByUpdatedDateDesc()
                 ?: return DepartmentBasicResponseDto(
@@ -80,5 +86,39 @@ class DepartmentService(
             }
         }
         return TopDepartmentResponseDto(topDepartmentInfos)
+    }
+
+    @Transactional
+    fun createDepartment(
+        departmentCreateRequestDto: DepartmentCreateRequestDto
+    ): List<UserProfile> {
+        val departments: MutableList<Department> = mutableListOf()
+        val adminUsers: MutableList<User> = mutableListOf()
+        departmentCreateRequestDto.departments?.forEach { departmentDto ->
+            val user =
+                User.makeAdmin(
+                    SignUpRequest(
+                        name = departmentDto.name!!,
+                        email = "${departmentDto.name}@uos.ac.kr",
+                        password = departmentDto.name
+                    ),
+                    encoder = encoder
+                )
+            adminUsers.add(user)
+            departments.add(
+                Department(
+                    name = departmentDto.name,
+                    message = departmentDto.message,
+                    introduction = departmentDto.introduction,
+                    internRecruitment = false,
+                    scholarshipRecruitment = false,
+                    user = user,
+                )
+            )
+        }
+        val users = userRepository.saveAll(adminUsers)
+        departmentRepository.saveAll(departments)
+
+        return users.map { UserProfile.from(it) }
     }
 }
