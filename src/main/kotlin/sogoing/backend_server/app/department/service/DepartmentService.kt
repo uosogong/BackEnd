@@ -100,7 +100,8 @@ class DepartmentService(
                     SignUpRequest(
                         name = departmentDto.name!!,
                         email = "${departmentDto.name}@uos.ac.kr",
-                        password = departmentDto.name
+                        password = departmentDto.name,
+                        studentId = ""
                     ),
                     encoder = encoder
                 )
