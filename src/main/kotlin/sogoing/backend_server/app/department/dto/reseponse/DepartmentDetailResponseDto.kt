@@ -17,11 +17,11 @@ data class DepartmentDetail(
     val name: String?,
     val introduction: String?,
     val leftDays: Int?,
-    val rating: Double,
+    val rating: Float,
     val updateAt: LocalDateTime?
 ) {
     companion object {
-        fun convertToDto(department: Department): DepartmentDetail {
+        fun convertToDto(department: Department, rating: Float): DepartmentDetail {
             return DepartmentDetail(
                 scholarshipRecruitment = department.scholarshipRecruitment,
                 internRecruitment = department.internRecruitment,
@@ -32,7 +32,7 @@ data class DepartmentDetail(
                         ChronoUnit.DAYS.between(LocalDate.now(), it).toInt()
                     }
                         ?: -1,
-                rating = 4.2,
+                rating = rating,
                 updateAt = department.updatedDate
             )
         }
