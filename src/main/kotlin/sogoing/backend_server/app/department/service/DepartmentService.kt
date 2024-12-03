@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional
 import sogoing.backend_server.app.auth.dto.SignUpRequest
 import sogoing.backend_server.app.department.dao.DepartmentDao
 import sogoing.backend_server.app.department.dto.request.DepartmentCreateRequestDto
+import sogoing.backend_server.app.department.dto.request.DepartmentDto
 import sogoing.backend_server.app.department.dto.request.DepartmentUpdateRequestDto
 import sogoing.backend_server.app.department.dto.reseponse.*
 import sogoing.backend_server.app.department.entity.Department
@@ -110,15 +111,7 @@ class DepartmentService(
         val departments: MutableList<Department> = mutableListOf()
         val adminUsers: MutableList<User> = mutableListOf()
         departmentCreateRequestDto.departments?.forEach { departmentDto ->
-            val user =
-                User.makeAdmin(
-                    SignUpRequest(
-                        name = departmentDto.name!!,
-                        email = "${departmentDto.name}@uos.ac.kr",
-                        password = departmentDto.name
-                    ),
-                    encoder = encoder
-                )
+            val user = makeAdminUser(departmentDto)
             adminUsers.add(user)
             departments.add(
                 Department(
@@ -134,5 +127,17 @@ class DepartmentService(
         departmentRepository.saveAll(departments)
 
         return users.map { UserProfile.from(it) }
+    }
+
+    private fun makeAdminUser(departmentDto: DepartmentDto): User {
+        return User.makeAdmin(
+            SignUpRequest(
+                name = departmentDto.name,
+                email = "${departmentDto.name}@uos.ac.kr",
+                password = departmentDto.name,
+                studentId = ""
+            ),
+            encoder = encoder
+        )
     }
 }

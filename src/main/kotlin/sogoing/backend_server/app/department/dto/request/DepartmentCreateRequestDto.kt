@@ -5,7 +5,7 @@ import io.swagger.v3.oas.annotations.media.Schema
 data class DepartmentCreateRequestDto(val departments: List<DepartmentDto>? = null)
 
 data class DepartmentDto(
-    @Schema(description = "부서명", example = "컴퓨터과학부") val name: String?,
+    @Schema(description = "부서명", example = "컴퓨터과학부") val name: String,
     @Schema(
         description = "세부 내용",
         example =
@@ -66,5 +66,5 @@ data class DepartmentDto(
 
  -  기타 문의사항은 메일로 문의 ( psy2024@uos.ac.kr ) """
     )
-    val introduction: String?,
+    val introduction: String,
 )
