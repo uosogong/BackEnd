@@ -2,6 +2,7 @@ package sogoing.backend_server.app.feedback.api
 
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
+import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.web.bind.annotation.*
 import sogoing.backend_server.app.feedback.dto.FeedbackRequestDto
 import sogoing.backend_server.app.feedback.dto.FeedbackResponseDto
@@ -14,12 +15,12 @@ class FeedbackController(private val feedbackService: FeedbackService) {
     @PostMapping("/{departmentId}")
     fun createFeedback(
         @PathVariable departmentId: Long?,
-        @AuthenticationPrincipal userId: Long,
+        @AuthenticationPrincipal userDetails: UserDetails,
         @RequestBody createForm: FeedbackRequestDto.CreateForm,
-    ): ResponseEntity<Unit> {
-        println(userId)
-        feedbackService.createFeedback(createForm, userId)
-        return ResponseEntity.ok().build()
+    ): ResponseEntity<Boolean> {
+        val isFeedbackCreated =
+            feedbackService.createFeedback(departmentId, createForm, userDetails.username.toLong())
+        return ResponseEntity.ok(isFeedbackCreated)
     }
 
     @GetMapping("/{departmentId}")
@@ -32,17 +33,17 @@ class FeedbackController(private val feedbackService: FeedbackService) {
     @PatchMapping("/{departmentId}")
     fun patchFeedback(
         @PathVariable departmentId: Long?,
-        @AuthenticationPrincipal userId: Long,
+        @AuthenticationPrincipal userDetails: UserDetails,
         @RequestBody updateForm: FeedbackRequestDto.UpdateForm
     ) {
-        feedbackService.patchFeedback(userId, departmentId, updateForm)
+        feedbackService.patchFeedback(userDetails.username.toLong(), departmentId, updateForm)
     }
 
     @DeleteMapping("/{feedbackId}")
     fun deleteFeedback(
         @PathVariable feedbackId: Long,
-        @AuthenticationPrincipal userId: Long,
+        @AuthenticationPrincipal userDetails: UserDetails,
     ) {
-        feedbackService.deleteFeedback(userId, feedbackId)
+        feedbackService.deleteFeedback(userDetails.username.toLong(), feedbackId)
     }
 }

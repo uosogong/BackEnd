@@ -16,14 +16,16 @@ class FeedbackResponseDto {
     }
 
     data class FeedbackDto(
+        val userId: Long? = null,
         val description: String? = null,
-        val rating: Int? = null,
+        val rating: Int,
         val busy: String? = null,
         val mood: String? = null,
     ) {
         companion object {
             fun convertToDto(feedback: Feedback): FeedbackDto {
                 return FeedbackDto(
+                    feedback.user.id,
                     feedback.description,
                     feedback.rating,
                     feedback.busy,

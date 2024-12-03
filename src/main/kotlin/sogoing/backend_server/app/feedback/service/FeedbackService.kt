@@ -1,6 +1,5 @@
 package sogoing.backend_server.app.feedback.service
 
-import java.lang.IllegalStateException
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -9,8 +8,10 @@ import sogoing.backend_server.app.feedback.dto.FeedbackRequestDto
 import sogoing.backend_server.app.feedback.dto.FeedbackResponseDto
 import sogoing.backend_server.app.feedback.entity.Feedback
 import sogoing.backend_server.app.feedback.repository.FeedbackRepository
-import sogoing.backend_server.app.user.entity.User
 import sogoing.backend_server.app.user.repository.UserRepository
+import sogoing.backend_server.common.error.exception.department.DepartmentNotFoundException
+import sogoing.backend_server.common.error.exception.feedback.FeedbackNotFoundException
+import sogoing.backend_server.common.error.exception.user.UserNotFoundException
 
 @Service
 @Transactional(readOnly = true)
@@ -20,29 +21,29 @@ class FeedbackService(
     private val departmentRepository: DepartmentRepository
 ) {
     @Transactional
-    fun createFeedback(createForm: FeedbackRequestDto.CreateForm, userId: Long) {
+    fun createFeedback(
+        departmentId: Long?,
+        createForm: FeedbackRequestDto.CreateForm,
+        userId: Long
+    ): Boolean {
         val department =
-            departmentRepository.findByIdOrNull(createForm.departmentId)
-                ?: throw IllegalStateException("부서 없음")
-        val user = userRepository.findByIdOrNull(userId) ?: throw IllegalStateException("유저 없음")
+            departmentRepository.findByIdOrNull(departmentId) ?: throw DepartmentNotFoundException()
+        val user = userRepository.findByIdOrNull(userId) ?: throw UserNotFoundException()
 
-        checkUserFeedback(user)
-
-        val feedback = createForm.createFeedback(department, user)
-        feedbackRepository.save(feedback)
-    }
-
-    private fun checkUserFeedback(user: User) {
-        val userFeedback = feedbackRepository.findByUser(user)
-        if (userFeedback != null) {
-            throw IllegalStateException("이미 리뷰를 작성함")
+        try {
+            getUserFeedback(userId, departmentId)
+        } catch (e: FeedbackNotFoundException) {
+            val feedback = createForm.createFeedback(department, user)
+            feedbackRepository.save(feedback)
+            return true
         }
+
+        return false
     }
 
     fun findDepartmentFeedbacks(departmentId: Long?): FeedbackResponseDto.FeedbackListDto {
         val department =
-            departmentRepository.findByIdOrNull(departmentId)
-                ?: throw IllegalStateException("부서 없음")
+            departmentRepository.findByIdOrNull(departmentId) ?: throw DepartmentNotFoundException()
 
         val departmentFeedbacks =
             feedbackRepository.findAllByDepartment(department)
@@ -56,24 +57,23 @@ class FeedbackService(
         departmentId: Long?,
         updateForm: FeedbackRequestDto.UpdateForm
     ) {
-        val existFeedback = getUniqueFeedback(userId, departmentId) ?: throw IllegalStateException()
+        val existFeedback = getUserFeedback(userId, departmentId)
         updateForm.updateFeedback(existFeedback)
     }
 
-    private fun getUniqueFeedback(userId: Long, departmentId: Long?): Feedback? {
+    private fun getUserFeedback(userId: Long, departmentId: Long?): Feedback {
         val department =
-            departmentRepository.findByIdOrNull(departmentId)
-                ?: throw IllegalStateException("부서 없음")
+            departmentRepository.findByIdOrNull(departmentId) ?: throw DepartmentNotFoundException()
 
-        val user = User(userId)
+        val user = userRepository.findByIdOrNull(userId) ?: throw UserNotFoundException()
         return feedbackRepository.findByDepartmentAndUser(department, user)
+            ?: throw FeedbackNotFoundException()
     }
 
     @Transactional
     fun deleteFeedback(userId: Long, feedbackId: Long) {
         val feedback =
-            feedbackRepository.findByIdOrNull(feedbackId)
-                ?: throw IllegalStateException("피드백이 없습니다")
+            feedbackRepository.findByIdOrNull(feedbackId) ?: throw FeedbackNotFoundException()
 
         validateFeedbackUser(userId, feedback)
 
@@ -83,7 +83,7 @@ class FeedbackService(
     private fun validateFeedbackUser(userId: Long, feedback: Feedback) {
         val user = userRepository.findByIdOrNull(userId)
         if (feedback.user != user) {
-            throw IllegalStateException("유저의 리뷰가 아닙니다")
+            throw FeedbackNotFoundException()
         }
     }
 }
