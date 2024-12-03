@@ -1,6 +1,5 @@
 package sogoing.backend_server.app.department.service
 
-import java.lang.IllegalStateException
 import org.springframework.data.crossstore.ChangeSetPersister
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -25,6 +24,10 @@ class DepartmentService(
 ) {
     fun getDepartmentByName(name: String): Department {
         return departmentRepository.findByName(name) ?: throw ChangeSetPersister.NotFoundException()
+    }
+
+    fun getDepartmentById(id: Long): Department {
+        return departmentRepository.findByIdOrNull(id) ?: throw ChangeSetPersister.NotFoundException()
     }
 
     fun getDepartmentsBasicInfo(): DepartmentBasicResponseDto {
@@ -62,7 +65,7 @@ class DepartmentService(
     fun updateDepartmentStatus(
         userId: Long,
         departmentId: Long,
-        departmentUpdateRequestDto: DepartmentUpdateRequestDto
+        departmentUpdateRequestDto: DepartmentUpdateRequestDto,
     ): DepartmentUpdateResponseDto {
         val user = userRepository.findByIdOrNull(userId) ?: throw IllegalStateException()
         val department =
@@ -90,7 +93,7 @@ class DepartmentService(
 
     @Transactional
     fun createDepartment(
-        departmentCreateRequestDto: DepartmentCreateRequestDto
+        departmentCreateRequestDto: DepartmentCreateRequestDto,
     ): List<UserProfile> {
         val departments: MutableList<Department> = mutableListOf()
         val adminUsers: MutableList<User> = mutableListOf()

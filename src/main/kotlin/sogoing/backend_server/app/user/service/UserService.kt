@@ -7,14 +7,19 @@ import org.springframework.transaction.annotation.Transactional
 import sogoing.backend_server.app.department.service.DepartmentService
 import sogoing.backend_server.app.user.dto.UserProfile
 import sogoing.backend_server.app.user.dto.UserUpdateRequest
+import sogoing.backend_server.app.user.entity.User
 import sogoing.backend_server.app.user.repository.UserRepository
 
 @Service
 @Transactional
 class UserService(
     private val userRepository: UserRepository,
-    private val departmentService: DepartmentService
+    private val departmentService: DepartmentService,
 ) {
+    fun getUserById(userId: Long): User {
+        return userRepository.findByIdOrNull(userId) ?: throw NotFoundException()
+    }
+
     fun getProfile(userId: Long): UserProfile {
         val user = userRepository.findByIdOrNull(userId) ?: throw NotFoundException()
         return UserProfile.from(user)
