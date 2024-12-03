@@ -9,7 +9,7 @@ import sogoing.backend_server.app.user.entity.User
 class Feedback(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) var id: Int? = null,
     var description: String? = null,
-    var rating: Int? = null,
+    var rating: Int,
     var busy: String? = null,
     var mood: String? = null,
     @ManyToOne(fetch = FetchType.LAZY)

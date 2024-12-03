@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
 import sogoing.backend_server.common.error.exception.AccessDeniedException
+import sogoing.backend_server.common.error.exception.EntityNotFoundException
 
 @RestControllerAdvice
 class GlobalExceptionHandler {
@@ -16,6 +17,12 @@ class GlobalExceptionHandler {
     fun handleException(exception: Exception): ResponseEntity<ApiResponse> {
         println(exception.message)
         val errorCode = ErrorCode.INTERNAL_SERVER_ERROR
+        return createErrorResponse(errorCode)
+    }
+
+    @ExceptionHandler(EntityNotFoundException::class)
+    fun handleRuntimeException(exception: EntityNotFoundException): ResponseEntity<ApiResponse> {
+        val errorCode = exception.errorCode
         return createErrorResponse(errorCode)
     }
 

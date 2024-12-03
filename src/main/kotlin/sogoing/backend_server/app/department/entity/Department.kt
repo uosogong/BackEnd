@@ -12,10 +12,8 @@ import sogoing.backend_server.app.user.entity.User
 @Table(name = "departments")
 class Department(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) var id: Long? = null,
-    var name: String? = null,
-    var message: String? = null,
+    @Column(unique = true) var name: String? = null,
     @Column(columnDefinition = "TEXT") var introduction: String? = null,
-    var schedule: String? = null,
     var scholarshipRecruitment: Boolean,
     var internRecruitment: Boolean,
     var recruitEndDate: LocalDate? = null,

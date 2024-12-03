@@ -7,14 +7,18 @@ import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import sogoing.backend_server.app.auth.dto.SignUpRequest
+import sogoing.backend_server.app.department.dao.DepartmentDao
 import sogoing.backend_server.app.department.dto.request.DepartmentCreateRequestDto
+import sogoing.backend_server.app.department.dto.request.DepartmentDto
 import sogoing.backend_server.app.department.dto.request.DepartmentUpdateRequestDto
 import sogoing.backend_server.app.department.dto.reseponse.*
 import sogoing.backend_server.app.department.entity.Department
 import sogoing.backend_server.app.department.repository.DepartmentRepository
+import sogoing.backend_server.app.feedback.service.FeedbackService
 import sogoing.backend_server.app.user.dto.UserProfile
 import sogoing.backend_server.app.user.entity.User
 import sogoing.backend_server.app.user.repository.UserRepository
+import sogoing.backend_server.common.error.exception.department.DepartmentNotFoundException
 
 @Service
 @Transactional(readOnly = true)
@@ -22,6 +26,8 @@ class DepartmentService(
     private val encoder: PasswordEncoder,
     private val departmentRepository: DepartmentRepository,
     private val userRepository: UserRepository,
+    private val departmentDao: DepartmentDao,
+    private val feedbackService: FeedbackService,
 ) {
     fun getDepartmentByName(name: String): Department {
         return departmentRepository.findByName(name) ?: throw ChangeSetPersister.NotFoundException()
@@ -37,23 +43,34 @@ class DepartmentService(
         val departmentBasicInfos: MutableList<DepartmentInfo> = mutableListOf()
 
         for (department in departments) {
-            departmentBasicInfos.add(DepartmentInfo.convertToDto(department))
+            val calculateRating = calculateRating(department)
+            val departmentInfo = DepartmentInfo.convertToDto(department, calculateRating)
+            departmentBasicInfos.add(departmentInfo)
         }
-
         return DepartmentBasicResponseDto(
             departments = departmentBasicInfos,
         )
     }
 
+    private fun calculateRating(department: Department): Float {
+        val feedbacks = feedbackService.findDepartmentFeedbacks(department.id)
+        feedbacks.feedbackList ?: return 0F
+        var sum = 0F
+        for (feedback in feedbacks.feedbackList) {
+            sum += feedback.rating
+        }
+        return sum / feedbacks.feedbackList.size
+    }
+
     fun getDepartmentInfoWithFeedback(departmentId: Long): DepartmentDetailResponseDto {
         val department =
-            departmentRepository.findByIdOrNull(departmentId)
-                ?: throw IllegalStateException("부서 id 불일치")
+            departmentRepository.findByIdOrNull(departmentId) ?: throw DepartmentNotFoundException()
 
+        val rating = calculateRating(department)
         val feedbacks = department.feedbacks
 
         return DepartmentDetailResponseDto(
-            departmentDetail = DepartmentDetail.convertToDto(department),
+            departmentDetail = DepartmentDetail.convertToDto(department, rating),
             feedbacks = DepartmentFeedback.convertToDto(feedbacks)
         )
     }
@@ -66,8 +83,7 @@ class DepartmentService(
     ): DepartmentUpdateResponseDto {
         val user = userRepository.findByIdOrNull(userId) ?: throw IllegalStateException()
         val department =
-            departmentRepository.findByIdOrNull(departmentId)
-                ?: throw IllegalStateException("부서 id 불일치")
+            departmentRepository.findByIdOrNull(departmentId) ?: throw DepartmentNotFoundException()
 
         if (department.user != user) {
             throw IllegalAccessError()
@@ -80,7 +96,7 @@ class DepartmentService(
     fun getTop5Department(): TopDepartmentResponseDto {
         val topDepartmentInfos: MutableList<TopDepartmentInfo> = mutableListOf()
 
-        departmentRepository.findTop5ByOrderByDibsDesc()?.let { top5 ->
+        departmentDao.findTop5DepartmentsByDibsCount()?.let { top5 ->
             for (department in top5) {
                 topDepartmentInfos.add(TopDepartmentInfo.convertToDto(department))
             }
@@ -95,21 +111,11 @@ class DepartmentService(
         val departments: MutableList<Department> = mutableListOf()
         val adminUsers: MutableList<User> = mutableListOf()
         departmentCreateRequestDto.departments?.forEach { departmentDto ->
-            val user =
-                User.makeAdmin(
-                    SignUpRequest(
-                        name = departmentDto.name!!,
-                        email = "${departmentDto.name}@uos.ac.kr",
-                        password = departmentDto.name,
-                        studentId = ""
-                    ),
-                    encoder = encoder
-                )
+            val user = makeAdminUser(departmentDto)
             adminUsers.add(user)
             departments.add(
                 Department(
                     name = departmentDto.name,
-                    message = departmentDto.message,
                     introduction = departmentDto.introduction,
                     internRecruitment = false,
                     scholarshipRecruitment = false,
@@ -121,5 +127,17 @@ class DepartmentService(
         departmentRepository.saveAll(departments)
 
         return users.map { UserProfile.from(it) }
+    }
+
+    private fun makeAdminUser(departmentDto: DepartmentDto): User {
+        return User.makeAdmin(
+            SignUpRequest(
+                name = departmentDto.name,
+                email = "${departmentDto.name}@uos.ac.kr",
+                password = departmentDto.name,
+                studentId = ""
+            ),
+            encoder = encoder
+        )
     }
 }
