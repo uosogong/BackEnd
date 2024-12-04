@@ -26,6 +26,8 @@ enum class ErrorCode(val code: String, val message: String, var status: Int) {
     INVALID_SIGNATURE("T01", "Invalid token signature.", HttpStatus.UNAUTHORIZED.value()),
     MALFORMED_TOKEN("T02", "Malformed token.", HttpStatus.UNAUTHORIZED.value()),
     EXPIRED_TOKEN("T03", "Token has expired.", HttpStatus.UNAUTHORIZED.value()),
+
+    // Department
     DEPARTMENT_NOT_FOUND("D01", "Department is not found.", HttpStatus.BAD_REQUEST.value()),
 
     // Feedback
