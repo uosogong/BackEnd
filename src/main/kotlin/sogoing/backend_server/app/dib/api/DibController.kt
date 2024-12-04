@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import sogoing.backend_server.app.dib.dto.DibChangeResponse
 import sogoing.backend_server.app.dib.dto.DibDepartmentListResponse
-import sogoing.backend_server.app.dib.dto.DibStatusResponse
 import sogoing.backend_server.app.dib.dto.DibDepartmentRequest
+import sogoing.backend_server.app.dib.dto.DibStatusResponse
 import sogoing.backend_server.app.dib.service.DibService
 
 @RestController
