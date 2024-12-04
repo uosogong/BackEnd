@@ -1,6 +1,8 @@
 package sogoing.backend_server.app.feedback.dto
 
 import sogoing.backend_server.app.feedback.entity.Feedback
+import sogoing.backend_server.app.feedback.entity.enums.Busy
+import sogoing.backend_server.app.feedback.entity.enums.Mood
 
 class FeedbackResponseDto {
     data class FeedbackListDto(
@@ -19,8 +21,8 @@ class FeedbackResponseDto {
         val userId: Long? = null,
         val description: String? = null,
         val rating: Int,
-        val busy: String? = null,
-        val mood: String? = null,
+        val busy: Busy? = null,
+        val mood: Mood? = null,
     ) {
         companion object {
             fun convertToDto(feedback: Feedback): FeedbackDto {
