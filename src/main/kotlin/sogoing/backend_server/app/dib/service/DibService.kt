@@ -5,8 +5,7 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import sogoing.backend_server.app.department.repository.DepartmentRepository
 import sogoing.backend_server.app.dib.dao.DibDao
-import sogoing.backend_server.app.dib.dto.DibChangeResponse
-import sogoing.backend_server.app.dib.dto.DibStatusResponse
+import sogoing.backend_server.app.dib.dto.*
 import sogoing.backend_server.app.dib.entity.Dib
 import sogoing.backend_server.app.dib.repository.DibRepository
 import sogoing.backend_server.app.user.repository.UserRepository
@@ -38,7 +37,7 @@ class DibService(
         return DibChangeResponse(true)
     }
 
-    fun getDibs(departmentId: Long, userId: Long): DibStatusResponse {
+    fun getDib(departmentId: Long, userId: Long): DibStatusResponse {
         departmentRepository.findByIdOrNull(departmentId) ?: throw DepartmentNotFoundException()
         val userDibs = dibDao.getDibFromUserIdAndDepartmentId(userId, departmentId)
 
@@ -46,5 +45,28 @@ class DibService(
             return DibStatusResponse(true)
         }
         return DibStatusResponse(false)
+    }
+
+    fun getDibs(
+        userId: Long,
+        dibDepartmentRequest: DibDepartmentRequest
+    ): DibDepartmentListResponse {
+        val dibDepartmentListResponse = DibDepartmentListResponse()
+        dibDepartmentRequest.requestDepartmentIdList?.forEach { departmentId ->
+            departmentRepository.findByIdOrNull(departmentId) ?: throw DepartmentNotFoundException()
+
+            val userDib = dibDao.getDibFromUserIdAndDepartmentId(userId, departmentId)
+
+            if (userDib != null) {
+                dibDepartmentListResponse.userDibStatus?.add(
+                    DibDepartmentAboutUser(departmentId, true)
+                )
+            } else {
+                dibDepartmentListResponse.userDibStatus?.add(
+                    DibDepartmentAboutUser(departmentId, false)
+                )
+            }
+        }
+        return dibDepartmentListResponse
     }
 }

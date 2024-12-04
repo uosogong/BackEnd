@@ -5,6 +5,8 @@ import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 import sogoing.backend_server.app.department.entity.Department
 import sogoing.backend_server.app.feedback.entity.Feedback
+import sogoing.backend_server.app.feedback.entity.enums.Busy
+import sogoing.backend_server.app.feedback.entity.enums.Mood
 
 data class DepartmentDetailResponseDto(
     val departmentDetail: DepartmentDetail,
@@ -41,8 +43,8 @@ data class DepartmentDetail(
 
 data class DepartmentFeedback(
     val name: String?,
-    val busy: String?,
-    val mood: String?,
+    val busy: Busy?,
+    val mood: Mood?,
     val description: String?,
     val rating: Int?,
     val update: LocalDateTime?,

@@ -17,7 +17,6 @@ data class DepartmentInfo(val departmentId: Long, val content: InfoContent) {
                 InfoContent(
                     scholarshipRecruitment = department.scholarshipRecruitment,
                     internRecruitment = department.internRecruitment,
-                    introduction = department.introduction,
                     leftDays =
                         department.recruitEndDate?.let {
                             ChronoUnit.DAYS.between(LocalDate.now(), it).toInt()
@@ -36,7 +35,6 @@ data class InfoContent(
     val scholarshipRecruitment: Boolean,
     val internRecruitment: Boolean,
     val name: String?,
-    val introduction: String?,
     val leftDays: Int?,
     var rating: Float = 0F,
     val updateAt: LocalDateTime?
