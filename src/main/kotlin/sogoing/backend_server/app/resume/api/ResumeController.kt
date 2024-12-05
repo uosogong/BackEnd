@@ -26,8 +26,6 @@ class ResumeController(private val resumeService: ResumeService) {
     fun findResume(
         @AuthenticationPrincipal userDetails: UserDetails,
     ): ApiResponse {
-        return ApiResponse.success(
-            resumeService.findResume(userDetails.username.toLong())
-        )
+        return ApiResponse.success(resumeService.findResume(userDetails.username.toLong()))
     }
 }

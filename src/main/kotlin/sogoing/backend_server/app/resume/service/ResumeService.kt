@@ -32,11 +32,13 @@ class ResumeService(
     fun findResume(userId: Long): List<ResumeGetResponse> {
         val department = userService.getUserById(userId).department ?: throw NotFoundException()
 
-        val resumes = resumeDao.findByDepartmentIdAndResumeType(
-            department.id!!,
-            isInternResume = department.internRecruitment,
-            isScholarShipResume = department.scholarshipRecruitment
-        ) ?: throw EntityNotFoundException()
+        val resumes =
+            resumeDao.findByDepartmentIdAndResumeType(
+                department.id!!,
+                isInternResume = department.internRecruitment,
+                isScholarShipResume = department.scholarshipRecruitment
+            )
+                ?: throw EntityNotFoundException()
 
         return resumes.stream().map(ResumeGetResponse::from).toList()
     }
