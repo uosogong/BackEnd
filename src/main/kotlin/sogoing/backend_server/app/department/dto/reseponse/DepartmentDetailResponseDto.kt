@@ -5,6 +5,8 @@ import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 import sogoing.backend_server.app.department.entity.Department
 import sogoing.backend_server.app.feedback.entity.Feedback
+import sogoing.backend_server.app.feedback.entity.enums.Busy
+import sogoing.backend_server.app.feedback.entity.enums.Mood
 
 data class DepartmentDetailResponseDto(
     val departmentDetail: DepartmentDetail,
@@ -17,11 +19,11 @@ data class DepartmentDetail(
     val name: String?,
     val introduction: String?,
     val leftDays: Int?,
-    val rating: Double,
+    val rating: Float,
     val updateAt: LocalDateTime?
 ) {
     companion object {
-        fun convertToDto(department: Department): DepartmentDetail {
+        fun convertToDto(department: Department, rating: Float): DepartmentDetail {
             return DepartmentDetail(
                 scholarshipRecruitment = department.scholarshipRecruitment,
                 internRecruitment = department.internRecruitment,
@@ -32,7 +34,7 @@ data class DepartmentDetail(
                         ChronoUnit.DAYS.between(LocalDate.now(), it).toInt()
                     }
                         ?: -1,
-                rating = 4.2,
+                rating = rating,
                 updateAt = department.updatedDate
             )
         }
@@ -41,8 +43,8 @@ data class DepartmentDetail(
 
 data class DepartmentFeedback(
     val name: String?,
-    val busy: String?,
-    val mood: String?,
+    val busy: Busy?,
+    val mood: Mood?,
     val description: String?,
     val rating: Int?,
     val update: LocalDateTime?,

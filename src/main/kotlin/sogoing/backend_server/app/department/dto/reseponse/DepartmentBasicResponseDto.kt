@@ -11,20 +11,19 @@ data class DepartmentBasicResponseDto(
 
 data class DepartmentInfo(val departmentId: Long, val content: InfoContent) {
     companion object {
-        fun convertToDto(department: Department): DepartmentInfo {
+        fun convertToDto(department: Department, rating: Float): DepartmentInfo {
             return DepartmentInfo(
                 department.id!!,
                 InfoContent(
                     scholarshipRecruitment = department.scholarshipRecruitment,
                     internRecruitment = department.internRecruitment,
-                    introduction = department.introduction,
                     leftDays =
                         department.recruitEndDate?.let {
                             ChronoUnit.DAYS.between(LocalDate.now(), it).toInt()
                         }
                             ?: -1,
                     name = department.name,
-                    rating = 4.2,
+                    rating = rating,
                     updateAt = department.updatedDate
                 )
             )
@@ -36,8 +35,7 @@ data class InfoContent(
     val scholarshipRecruitment: Boolean,
     val internRecruitment: Boolean,
     val name: String?,
-    val introduction: String?,
     val leftDays: Int?,
-    val rating: Double,
+    var rating: Float = 0F,
     val updateAt: LocalDateTime?
 )
