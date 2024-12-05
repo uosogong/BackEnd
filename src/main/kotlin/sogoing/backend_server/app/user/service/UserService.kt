@@ -5,7 +5,7 @@ import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import sogoing.backend_server.app.department.service.DepartmentService
-import sogoing.backend_server.app.user.dto.UserProfile
+import sogoing.backend_server.app.user.dto.UserGetResponse
 import sogoing.backend_server.app.user.dto.UserUpdateRequest
 import sogoing.backend_server.app.user.entity.User
 import sogoing.backend_server.app.user.repository.UserRepository
@@ -20,12 +20,12 @@ class UserService(
         return userRepository.findByIdOrNull(userId) ?: throw NotFoundException()
     }
 
-    fun getProfile(userId: Long): UserProfile {
+    fun getProfile(userId: Long): UserGetResponse {
         val user = userRepository.findByIdOrNull(userId) ?: throw NotFoundException()
-        return UserProfile.from(user)
+        return UserGetResponse.from(user)
     }
 
-    fun updateProfile(userId: Long, updateRequest: UserUpdateRequest): UserProfile {
+    fun updateProfile(userId: Long, updateRequest: UserUpdateRequest): UserGetResponse {
         val user = userRepository.findByIdOrNull(userId) ?: throw NotFoundException()
 
         user.apply {
@@ -41,6 +41,6 @@ class UserService(
 
         userRepository.save(user)
 
-        return UserProfile.from(user)
+        return UserGetResponse.from(user)
     }
 }

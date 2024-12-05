@@ -17,7 +17,7 @@ import sogoing.backend_server.app.department.dto.reseponse.DepartmentDetailRespo
 import sogoing.backend_server.app.department.dto.reseponse.DepartmentUpdateResponseDto
 import sogoing.backend_server.app.department.dto.reseponse.TopDepartmentResponseDto
 import sogoing.backend_server.app.department.service.DepartmentService
-import sogoing.backend_server.app.user.dto.UserProfile
+import sogoing.backend_server.app.user.dto.UserGetResponse
 
 @RestController
 @RequestMapping("/departments")
@@ -58,7 +58,7 @@ class DepartmentController(private val departmentService: DepartmentService) {
     @PostMapping
     fun createDepartment(
         @RequestBody departmentCreateRequestDto: DepartmentCreateRequestDto
-    ): ResponseEntity<List<UserProfile>> {
+    ): ResponseEntity<List<UserGetResponse>> {
         return ResponseEntity.ok(departmentService.createDepartment(departmentCreateRequestDto))
     }
 }

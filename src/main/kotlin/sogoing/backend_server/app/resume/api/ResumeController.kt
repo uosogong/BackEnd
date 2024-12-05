@@ -17,6 +17,17 @@ class ResumeController(private val resumeService: ResumeService) {
         @PathVariable departmentId: Long,
         @RequestBody requestBody: ResumeCreateRequest,
     ): ApiResponse {
-        return ApiResponse.success(resumeService.createResume(userDetails.username.toLong(), departmentId, requestBody))
+        return ApiResponse.success(
+            resumeService.createResume(userDetails.username.toLong(), departmentId, requestBody)
+        )
+    }
+
+    @GetMapping
+    fun findResume(
+        @AuthenticationPrincipal userDetails: UserDetails,
+    ): ApiResponse {
+        return ApiResponse.success(
+            resumeService.findResume(userDetails.username.toLong())
+        )
     }
 }

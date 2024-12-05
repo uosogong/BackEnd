@@ -21,6 +21,7 @@ enum class ErrorCode(val code: String, val message: String, var status: Int) {
         "User Email is already Existing",
         HttpStatus.BAD_REQUEST.value()
     ),
+    RESUME_NOT_FOUND("R01", "Resume is Not Found.", HttpStatus.BAD_REQUEST.value()),
 
     // Token
     INVALID_SIGNATURE("T01", "Invalid token signature.", HttpStatus.UNAUTHORIZED.value()),

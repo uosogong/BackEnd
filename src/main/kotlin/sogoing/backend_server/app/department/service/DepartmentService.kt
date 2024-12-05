@@ -11,7 +11,7 @@ import sogoing.backend_server.app.department.dto.request.DepartmentUpdateRequest
 import sogoing.backend_server.app.department.dto.reseponse.*
 import sogoing.backend_server.app.department.entity.Department
 import sogoing.backend_server.app.department.repository.DepartmentRepository
-import sogoing.backend_server.app.user.dto.UserProfile
+import sogoing.backend_server.app.user.dto.UserGetResponse
 import sogoing.backend_server.app.user.entity.User
 import sogoing.backend_server.app.user.repository.UserRepository
 
@@ -27,7 +27,8 @@ class DepartmentService(
     }
 
     fun getDepartmentById(id: Long): Department {
-        return departmentRepository.findByIdOrNull(id) ?: throw ChangeSetPersister.NotFoundException()
+        return departmentRepository.findByIdOrNull(id)
+            ?: throw ChangeSetPersister.NotFoundException()
     }
 
     fun getDepartmentsBasicInfo(): DepartmentBasicResponseDto {
@@ -94,7 +95,7 @@ class DepartmentService(
     @Transactional
     fun createDepartment(
         departmentCreateRequestDto: DepartmentCreateRequestDto,
-    ): List<UserProfile> {
+    ): List<UserGetResponse> {
         val departments: MutableList<Department> = mutableListOf()
         val adminUsers: MutableList<User> = mutableListOf()
         departmentCreateRequestDto.departments?.forEach { departmentDto ->
@@ -123,6 +124,6 @@ class DepartmentService(
         val users = userRepository.saveAll(adminUsers)
         departmentRepository.saveAll(departments)
 
-        return users.map { UserProfile.from(it) }
+        return users.map { UserGetResponse.from(it) }
     }
 }
