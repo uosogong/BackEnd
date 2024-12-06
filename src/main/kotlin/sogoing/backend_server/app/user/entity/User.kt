@@ -34,6 +34,7 @@ class User(
                 name = request.name,
                 email = request.email,
                 password = encoder.encode(request.password),
+                phone = request.phone,
                 role = UserRole.USER
             )
 

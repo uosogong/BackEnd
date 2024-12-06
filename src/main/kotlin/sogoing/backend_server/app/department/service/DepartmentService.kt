@@ -1,6 +1,5 @@
 package sogoing.backend_server.app.department.service
 
-import java.lang.IllegalStateException
 import org.springframework.data.crossstore.ChangeSetPersister
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -15,7 +14,7 @@ import sogoing.backend_server.app.department.dto.reseponse.*
 import sogoing.backend_server.app.department.entity.Department
 import sogoing.backend_server.app.department.repository.DepartmentRepository
 import sogoing.backend_server.app.feedback.service.FeedbackService
-import sogoing.backend_server.app.user.dto.UserProfile
+import sogoing.backend_server.app.user.dto.UserGetResponse
 import sogoing.backend_server.app.user.entity.User
 import sogoing.backend_server.app.user.repository.UserRepository
 import sogoing.backend_server.common.error.exception.department.DepartmentNotFoundException
@@ -31,6 +30,11 @@ class DepartmentService(
 ) {
     fun getDepartmentByName(name: String): Department {
         return departmentRepository.findByName(name) ?: throw ChangeSetPersister.NotFoundException()
+    }
+
+    fun getDepartmentById(id: Long): Department {
+        return departmentRepository.findByIdOrNull(id)
+            ?: throw ChangeSetPersister.NotFoundException()
     }
 
     fun getDepartmentsBasicInfo(): DepartmentBasicResponseDto {
@@ -79,7 +83,7 @@ class DepartmentService(
     fun updateDepartmentStatus(
         userId: Long,
         departmentId: Long,
-        departmentUpdateRequestDto: DepartmentUpdateRequestDto
+        departmentUpdateRequestDto: DepartmentUpdateRequestDto,
     ): DepartmentUpdateResponseDto {
         val user = userRepository.findByIdOrNull(userId) ?: throw IllegalStateException()
         val department =
@@ -106,8 +110,8 @@ class DepartmentService(
 
     @Transactional
     fun createDepartment(
-        departmentCreateRequestDto: DepartmentCreateRequestDto
-    ): List<UserProfile> {
+        departmentCreateRequestDto: DepartmentCreateRequestDto,
+    ): List<UserGetResponse> {
         val departments: MutableList<Department> = mutableListOf()
         val adminUsers: MutableList<User> = mutableListOf()
         departmentCreateRequestDto.departments?.forEach { departmentDto ->
@@ -126,7 +130,7 @@ class DepartmentService(
         val users = userRepository.saveAll(adminUsers)
         departmentRepository.saveAll(departments)
 
-        return users.map { UserProfile.from(it) }
+        return users.map { UserGetResponse.from(it) }
     }
 
     private fun makeAdminUser(departmentDto: DepartmentDto): User {
@@ -135,7 +139,8 @@ class DepartmentService(
                 name = departmentDto.name,
                 email = "${departmentDto.name}@uos.ac.kr",
                 password = departmentDto.name,
-                studentId = ""
+                studentId = "",
+                phone = "",
             ),
             encoder = encoder
         )

@@ -3,7 +3,7 @@ package sogoing.backend_server.app.user.dto
 import sogoing.backend_server.app.user.entity.User
 import sogoing.backend_server.app.user.entity.UserRole
 
-data class UserProfile(
+data class UserGetResponse(
     val id: Long?,
     val name: String?,
     val address: String?,
@@ -15,8 +15,8 @@ data class UserProfile(
     val studentId: String?,
 ) {
     companion object {
-        fun from(user: User): UserProfile {
-            return UserProfile(
+        fun from(user: User): UserGetResponse {
+            return UserGetResponse(
                 id = user.id,
                 name = user.name,
                 address = user.address,

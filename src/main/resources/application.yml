@@ -26,8 +26,15 @@ jwt:
   refresh:
     secret: ${JWT_REFRESH_SECRET}
     expiration: 1209600000
-    
+
 logging:
   level:
     org.hibernate.SQL: DEBUG
-    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    root: INFO
+
+  file:
+    path: /logs/myapp_logs
+    name: app.log
+
+  pattern:
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
