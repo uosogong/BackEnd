@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional
 import sogoing.backend_server.app.department.service.DepartmentService
 import sogoing.backend_server.app.resume.dao.ResumeDao
 import sogoing.backend_server.app.resume.dto.ResumeCreateRequest
+import sogoing.backend_server.app.resume.dto.ResumeGetRequest
 import sogoing.backend_server.app.resume.dto.ResumeGetResponse
 import sogoing.backend_server.app.resume.entity.Resume
 import sogoing.backend_server.app.resume.repository.ResumeRepository
@@ -29,14 +30,14 @@ class ResumeService(
         resumeRepository.save(resume)
     }
 
-    fun findResume(userId: Long): List<ResumeGetResponse> {
+    fun findResume(userId: Long, request: ResumeGetRequest): List<ResumeGetResponse> {
         val department = userService.getUserById(userId).department ?: throw NotFoundException()
 
         val resumes =
             resumeDao.findByDepartmentIdAndResumeType(
                 department.id!!,
-                isInternResume = department.internRecruitment,
-                isScholarShipResume = department.scholarshipRecruitment
+                isInternResume = request.isInternResume,
+                isScholarshipResume = request.isScholarshipResume
             )
                 ?: throw EntityNotFoundException()
 
