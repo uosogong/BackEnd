@@ -139,7 +139,8 @@ class DepartmentService(
                 name = departmentDto.name,
                 email = "${departmentDto.name}@uos.ac.kr",
                 password = departmentDto.name,
-                studentId = ""
+                studentId = "",
+                phone = "",
             ),
             encoder = encoder
         )
