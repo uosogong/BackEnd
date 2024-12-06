@@ -24,7 +24,7 @@ class SecurityConfig(
     fun filterChain(http: HttpSecurity) =
         http
             .csrf { it.disable() }
-            .cors { }
+            .cors {}
             .headers { it.frameOptions { frameOptions -> frameOptions.sameOrigin() } }
             .authorizeHttpRequests {
                 it.requestMatchers(*allowedUris).permitAll().anyRequest().authenticated()
@@ -39,7 +39,8 @@ class SecurityConfig(
     @Configuration
     class WebConfig : WebMvcConfigurer {
         override fun addCorsMappings(registry: CorsRegistry) {
-            registry.addMapping("/**")
+            registry
+                .addMapping("/**")
                 .allowedOrigins("https://www.sogoing.kro.kr/", "http://localhost:5173/") // 허용할 도메인
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH") // 허용할 HTTP 메서드
         }
