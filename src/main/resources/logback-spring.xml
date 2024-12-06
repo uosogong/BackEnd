@@ -1,5 +1,5 @@
 <configuration>
-    <!-- 로그 패턴과 출력 위치 설정 -->
+    <!-- INFO 로그 Appender -->
     <appender name="INFO" class="ch.qos.logback.core.FileAppender">
         <file>/logs/myapp_logs/info-${PID}.log</file>
         <encoder>
@@ -7,6 +7,7 @@
         </encoder>
     </appender>
 
+    <!-- WARN 로그 Appender -->
     <appender name="WARN" class="ch.qos.logback.core.FileAppender">
         <file>/logs/myapp_logs/warn-${PID}.log</file>
         <encoder>
@@ -14,6 +15,7 @@
         </encoder>
     </appender>
 
+    <!-- ERROR 로그 Appender -->
     <appender name="ERROR" class="ch.qos.logback.core.FileAppender">
         <file>/logs/myapp_logs/error-${PID}.log</file>
         <encoder>
@@ -21,14 +23,19 @@
         </encoder>
     </appender>
 
+    <!-- 전체 로그 Appender -->
+    <appender name="FULL_LOGS" class="ch.qos.logback.core.FileAppender">
+        <file>/logs/myapp_logs/full-logs-${PID}.log</file>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
     <!-- 루트 로깅 설정 -->
     <root level="INFO">
         <appender-ref ref="INFO" />
-    </root>
-
-    <logger name="com.example" level="DEBUG">
-        <appender-ref ref="INFO" />
         <appender-ref ref="WARN" />
         <appender-ref ref="ERROR" />
-    </logger>
+        <appender-ref ref="FULL_LOGS" />
+    </root>
 </configuration>
