@@ -11,6 +11,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener::class)
 abstract class BaseEntity(
-    @CreatedDate @Column(name = "created_date", updatable = false) var createdDate: LocalDateTime? = null,
+    @CreatedDate
+    @Column(name = "created_date", updatable = false)
+    var createdDate: LocalDateTime? = null,
     @LastModifiedDate @Column(name = "updated_date") var updatedDate: LocalDateTime? = null,
 )
