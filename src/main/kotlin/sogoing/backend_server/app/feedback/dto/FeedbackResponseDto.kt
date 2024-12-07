@@ -1,5 +1,6 @@
 package sogoing.backend_server.app.feedback.dto
 
+import java.time.LocalDateTime
 import sogoing.backend_server.app.feedback.entity.Feedback
 import sogoing.backend_server.app.feedback.entity.enums.Busy
 import sogoing.backend_server.app.feedback.entity.enums.Mood
@@ -23,6 +24,7 @@ class FeedbackResponseDto {
         val rating: Int,
         val busy: Busy? = null,
         val mood: Mood? = null,
+        val updatedAt: LocalDateTime? = null
     ) {
         companion object {
             fun convertToDto(feedback: Feedback): FeedbackDto {
@@ -31,7 +33,8 @@ class FeedbackResponseDto {
                     feedback.description,
                     feedback.rating,
                     feedback.busy,
-                    feedback.mood
+                    feedback.mood,
+                    feedback.updatedDate
                 )
             }
         }
