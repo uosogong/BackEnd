@@ -1,12 +1,12 @@
 package sogoing.backend_server.app.department.entity
 
-import com.uoslife.common.entity.BaseEntity
 import jakarta.persistence.*
 import java.time.LocalDate
 import sogoing.backend_server.app.dib.entity.Dib
 import sogoing.backend_server.app.feedback.entity.Feedback
 import sogoing.backend_server.app.resume.entity.Resume
 import sogoing.backend_server.app.user.entity.User
+import sogoing.backend_server.common.entity.BaseEntity
 
 @Entity
 @Table(name = "departments")

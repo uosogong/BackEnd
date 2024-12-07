@@ -1,10 +1,10 @@
 package sogoing.backend_server.app.resume.entity
 
-import com.uoslife.common.entity.BaseEntity
 import jakarta.persistence.*
 import sogoing.backend_server.app.department.entity.Department
 import sogoing.backend_server.app.resume.dto.ResumeCreateRequest
 import sogoing.backend_server.app.user.entity.User
+import sogoing.backend_server.common.entity.BaseEntity
 
 @Entity
 @Table(name = "resumes")

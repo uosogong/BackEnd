@@ -1,4 +1,4 @@
-package com.uoslife.common.entity
+package sogoing.backend_server.common.entity
 
 import jakarta.persistence.Column
 import jakarta.persistence.EntityListeners

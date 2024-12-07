@@ -1,6 +1,5 @@
 package sogoing.backend_server.app.user.entity
 
-import com.uoslife.common.entity.SoftDeleteEntity
 import jakarta.persistence.*
 import jakarta.validation.constraints.Email
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -8,6 +7,7 @@ import sogoing.backend_server.app.auth.dto.SignUpRequest
 import sogoing.backend_server.app.department.entity.Department
 import sogoing.backend_server.app.feedback.entity.Feedback
 import sogoing.backend_server.app.resume.entity.Resume
+import sogoing.backend_server.common.entity.SoftDeleteEntity
 
 @Entity
 @Table(name = "users")

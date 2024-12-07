@@ -41,7 +41,11 @@ class SecurityConfig(
         override fun addCorsMappings(registry: CorsRegistry) {
             registry
                 .addMapping("/**")
-                .allowedOrigins("https://www.sogoing.kro.kr/", "http://localhost:5173/") // 허용할 도메인
+                .allowedOrigins(
+                    "https://www.sogoing.kro.kr/",
+                    "http://localhost:5173/",
+                    "https://api.sogoing.kro.kr/"
+                ) // 허용할 도메인
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH") // 허용할 HTTP 메서드
         }
     }

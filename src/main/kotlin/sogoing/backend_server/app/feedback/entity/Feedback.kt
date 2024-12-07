@@ -1,11 +1,11 @@
 package sogoing.backend_server.app.feedback.entity
 
-import com.uoslife.common.entity.BaseEntity
 import jakarta.persistence.*
 import sogoing.backend_server.app.department.entity.Department
 import sogoing.backend_server.app.feedback.entity.enums.Busy
 import sogoing.backend_server.app.feedback.entity.enums.Mood
 import sogoing.backend_server.app.user.entity.User
+import sogoing.backend_server.common.entity.BaseEntity
 
 @Entity
 class Feedback(
