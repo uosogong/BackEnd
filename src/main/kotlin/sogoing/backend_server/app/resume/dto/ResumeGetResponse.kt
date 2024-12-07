@@ -25,7 +25,7 @@ data class ResumeGetResponse(
                 email = resume.email,
                 schedule = resume.schedule,
                 content = resume.content,
-                createdDate = resume.createdDate
+                createdDate = resume.createdDate!!
             )
         }
     }
