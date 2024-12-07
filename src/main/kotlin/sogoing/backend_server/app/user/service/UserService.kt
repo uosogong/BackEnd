@@ -43,4 +43,8 @@ class UserService(
 
         return UserGetResponse.from(user)
     }
+
+    fun deleteUserById(userId: Long) {
+        userRepository.deleteById(userId)
+    }
 }
