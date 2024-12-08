@@ -13,8 +13,6 @@ import org.springframework.security.core.userdetails.User
 import org.springframework.security.web.authentication.WebAuthenticationDetails
 import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
-import sogoing.backend_server.common.error.ErrorCode
-import sogoing.backend_server.common.error.exception.AccessDeniedException
 
 @Order(0)
 @Component
@@ -25,8 +23,7 @@ class JwtAuthenticationFilter(private val tokenProvider: TokenProvider) : OncePe
         filterChain: FilterChain
     ) {
         try {
-            val token =
-                parseBearerToken(request) ?: throw AccessDeniedException(ErrorCode.TOKEN_NOT_FOUND)
+            val token = parseBearerToken(request)
             val user = parseUserSpecification(token)
             UsernamePasswordAuthenticationToken.authenticated(user, token, user.authorities)
                 .apply { details = WebAuthenticationDetails(request) }
