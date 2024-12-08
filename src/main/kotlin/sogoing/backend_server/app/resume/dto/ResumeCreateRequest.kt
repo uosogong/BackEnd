@@ -11,4 +11,5 @@ data class ResumeCreateRequest(
     val email: String,
     val schedule: String,
     val content: String,
+    val birthday: String,
 )
