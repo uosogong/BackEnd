@@ -1,4 +1,4 @@
-package sogoing.backend_server.common
+package sogoing.backend_server.common.config
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -6,17 +6,17 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
-import org.springframework.security.web.AuthenticationEntryPoint
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter
 import org.springframework.web.servlet.config.annotation.CorsRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
+import sogoing.backend_server.app.auth.JwtAuthenticationEntryPoint
 import sogoing.backend_server.app.auth.JwtAuthenticationFilter
 
 @EnableMethodSecurity
 @Configuration
 class SecurityConfig(
     private val jwtAuthenticationFilter: JwtAuthenticationFilter,
-    private val entryPoint: AuthenticationEntryPoint
+    private val entryPoint: JwtAuthenticationEntryPoint
 ) {
     private val allowedUris =
         arrayOf(
