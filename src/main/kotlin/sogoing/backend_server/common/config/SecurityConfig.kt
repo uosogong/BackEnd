@@ -18,7 +18,15 @@ class SecurityConfig(
     private val jwtAuthenticationFilter: JwtAuthenticationFilter,
     private val entryPoint: AuthenticationEntryPoint
 ) {
-    private val allowedUris = arrayOf("/signup", "/signin")
+    private val allowedUris =
+        arrayOf(
+            "/signup",
+            "/signin",
+            "/departments",
+            "/swagger-ui/**",
+            "/v3/api-docs/**",
+            "/swagger-ui/index.html"
+        )
 
     @Bean
     fun filterChain(http: HttpSecurity) =
@@ -27,7 +35,13 @@ class SecurityConfig(
             .cors {}
             .headers { it.frameOptions { frameOptions -> frameOptions.sameOrigin() } }
             .authorizeHttpRequests {
-                it.requestMatchers(*allowedUris).permitAll().anyRequest().authenticated()
+                it
+                    // 특정 URI는 모두 허용
+                    .requestMatchers(*allowedUris)
+                    .permitAll()
+                    // 나머지 요청은 인증 필요
+                    .anyRequest()
+                    .hasAnyAuthority("USER", "ADMIN")
             }
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
             .addFilterBefore(jwtAuthenticationFilter, BasicAuthenticationFilter::class.java)

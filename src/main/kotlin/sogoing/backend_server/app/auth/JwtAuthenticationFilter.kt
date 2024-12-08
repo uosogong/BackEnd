@@ -42,7 +42,7 @@ class JwtAuthenticationFilter(private val tokenProvider: TokenProvider) : OncePe
 
     private fun parseUserSpecification(token: String?) =
         (token?.takeIf { it.length >= 10 }?.let { tokenProvider.validateTokenAndGetSubject(it) }
-                ?: "anonymous:anonymous")
+                ?: "0:anonymous")
             .split(":")
             .let { User(it[0], "", listOf(SimpleGrantedAuthority(it[1]))) }
 }
