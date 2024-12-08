@@ -13,6 +13,7 @@ import sogoing.backend_server.app.department.dto.request.DepartmentUpdateRequest
 import sogoing.backend_server.app.department.dto.reseponse.*
 import sogoing.backend_server.app.department.entity.Department
 import sogoing.backend_server.app.department.repository.DepartmentRepository
+import sogoing.backend_server.app.dib.service.DibService
 import sogoing.backend_server.app.feedback.service.FeedbackService
 import sogoing.backend_server.app.user.dto.UserGetResponse
 import sogoing.backend_server.app.user.entity.User
@@ -27,6 +28,7 @@ class DepartmentService(
     private val userRepository: UserRepository,
     private val departmentDao: DepartmentDao,
     private val feedbackService: FeedbackService,
+    private val dibService: DibService,
 ) {
     fun getDepartmentByName(name: String): Department {
         return departmentRepository.findByName(name) ?: throw ChangeSetPersister.NotFoundException()
@@ -37,7 +39,7 @@ class DepartmentService(
             ?: throw ChangeSetPersister.NotFoundException()
     }
 
-    fun getDepartmentsBasicInfo(): DepartmentBasicResponseDto {
+    fun getDepartmentsBasicInfo(userId: Long): DepartmentBasicResponseDto {
         val departments =
             departmentRepository.findAllByOrderByUpdatedDateDesc()
                 ?: return DepartmentBasicResponseDto(
@@ -48,12 +50,18 @@ class DepartmentService(
 
         for (department in departments) {
             val calculateRating = calculateRating(department)
-            val departmentInfo = DepartmentInfo.convertToDto(department, calculateRating)
+            val isUserDibs = if (userId == 0L) false else getUserDibs(department.id!!, userId)
+            val departmentInfo =
+                DepartmentInfo.convertToDto(department, calculateRating, isUserDibs)
             departmentBasicInfos.add(departmentInfo)
         }
         return DepartmentBasicResponseDto(
             departments = departmentBasicInfos,
         )
+    }
+
+    private fun getUserDibs(departmentId: Long, userId: Long): Boolean {
+        return dibService.getDib(departmentId, userId).userDib
     }
 
     private fun calculateRating(department: Department): Float {
