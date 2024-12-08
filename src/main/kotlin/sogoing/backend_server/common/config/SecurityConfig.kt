@@ -22,7 +22,8 @@ class SecurityConfig(
         arrayOf(
             "/signup",
             "/signin",
-            "/departments",
+            "/departments/**",
+            "/feedbacks/*",
             "/swagger-ui/**",
             "/v3/api-docs/**",
             "/swagger-ui/index.html"
