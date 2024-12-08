@@ -24,8 +24,12 @@ import sogoing.backend_server.app.user.dto.UserGetResponse
 class DepartmentController(private val departmentService: DepartmentService) {
 
     @GetMapping
-    fun getDepartmentsBasicInfo(): ResponseEntity<DepartmentBasicResponseDto> {
-        return ResponseEntity.ok(departmentService.getDepartmentsBasicInfo())
+    fun getDepartmentsBasicInfo(
+        @AuthenticationPrincipal userDetails: UserDetails,
+    ): ResponseEntity<DepartmentBasicResponseDto> {
+        return ResponseEntity.ok(
+            departmentService.getDepartmentsBasicInfo(userDetails.username.toLong())
+        )
     }
 
     @GetMapping("/{departmentId}")

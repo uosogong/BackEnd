@@ -25,7 +25,7 @@ class User(
     var birthday: String? = null,
     var departmentName: String? = null,
     var studentId: String? = null,
-    @Email var email: String? = null,
+    @Email @Column(unique = true) var email: String? = null,
     var password: String? = null,
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     var resumes: MutableList<Resume> = mutableListOf(),
