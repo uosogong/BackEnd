@@ -6,6 +6,7 @@ import sogoing.backend_server.app.user.entity.UserRole
 data class SignResponse(
     @Schema(description = "회원 이름", example = "신짱구") val name: String?,
     @Schema(description = "회원 권한", example = "USER") val role: UserRole?,
+    @Schema(description = "부서 ID", example = "8") val departmentId: Long? = null,
     @Schema(
         description = "Access Token",
         example =

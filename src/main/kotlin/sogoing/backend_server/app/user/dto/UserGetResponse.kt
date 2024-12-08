@@ -13,6 +13,7 @@ data class UserGetResponse(
     val departmentName: String?,
     val schedule: String?,
     val studentId: String?,
+    val birthDay: String?,
 ) {
     companion object {
         fun from(user: User): UserGetResponse {
@@ -25,7 +26,8 @@ data class UserGetResponse(
                 role = user.role,
                 departmentName = user.departmentName,
                 schedule = user.schedule,
-                studentId = user.studentId
+                studentId = user.studentId,
+                birthDay = user.birthday
             )
         }
     }

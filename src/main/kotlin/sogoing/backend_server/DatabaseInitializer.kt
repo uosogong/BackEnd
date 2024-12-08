@@ -182,7 +182,7 @@ class DatabaseInitializer(
             for (departmentNode in departmentsNode) {
                 val name = departmentNode.path("name").asText()
                 val introduction = departmentNode.path("introduction").asText()
-                val user = makeAdminUser("department${count}")
+                val user = makeAdminUser("department${count}", "$name 관리자")
                 adminUsers.add(user)
                 val department =
                     Department(
@@ -203,10 +203,10 @@ class DatabaseInitializer(
         }
     }
 
-    private fun makeAdminUser(departmentName: String): User {
+    private fun makeAdminUser(departmentName: String, userName: String): User {
         return User.makeAdmin(
             SignUpRequest(
-                name = departmentName,
+                name = userName,
                 email = "${departmentName}@uos.ac.kr",
                 password = departmentName,
                 studentId = "",
