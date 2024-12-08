@@ -3,7 +3,8 @@ package sogoing.backend_server.common.error
 import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.MalformedJwtException
 import io.jsonwebtoken.security.SignatureException
-import org.springframework.http.HttpStatus
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
@@ -13,43 +14,53 @@ import sogoing.backend_server.common.error.exception.EntityNotFoundException
 @RestControllerAdvice
 class GlobalExceptionHandler {
 
-    @ExceptionHandler(Exception::class)
-    fun handleException(exception: Exception): ResponseEntity<ApiResponse> {
-        println(exception.message)
-        val errorCode = ErrorCode.INTERNAL_SERVER_ERROR
-        return createErrorResponse(errorCode)
-    }
+    private val logger: Logger = LoggerFactory.getLogger(this::class.java)
 
+    // Specific handler for entity not found
     @ExceptionHandler(EntityNotFoundException::class)
-    fun handleRuntimeException(exception: EntityNotFoundException): ResponseEntity<ApiResponse> {
-        val errorCode = exception.errorCode
-        return createErrorResponse(errorCode)
+    fun handleEntityNotFoundException(
+        exception: EntityNotFoundException
+    ): ResponseEntity<ApiResponse> {
+        logger.warn("Entity not found: ${exception.message}")
+        return createErrorResponse(exception.errorCode)
     }
 
+    // Specific handler for access denied
     @ExceptionHandler(AccessDeniedException::class)
     fun handleAccessDeniedException(exception: AccessDeniedException): ResponseEntity<ApiResponse> {
-        val errorCode = exception.errorCode
-        return createErrorResponse(errorCode)
+        logger.warn("Access denied: ${exception.message}")
+        return createErrorResponse(exception.errorCode)
     }
 
+    // JWT-related handlers
     @ExceptionHandler(SignatureException::class)
-    fun handleSignatureException(): ResponseEntity<ApiResponse> {
+    fun handleSignatureException(exception: SignatureException): ResponseEntity<ApiResponse> {
+        logger.warn("Invalid signature: ${exception.message}")
         return createErrorResponse(ErrorCode.INVALID_SIGNATURE)
     }
 
     @ExceptionHandler(MalformedJwtException::class)
-    fun handleMalformedJwtException(): ResponseEntity<ApiResponse> {
+    fun handleMalformedJwtException(exception: MalformedJwtException): ResponseEntity<ApiResponse> {
+        logger.warn("Malformed JWT token: ${exception.message}")
         return createErrorResponse(ErrorCode.MALFORMED_TOKEN)
     }
 
     @ExceptionHandler(ExpiredJwtException::class)
-    fun handleExpiredJwtException(): ResponseEntity<ApiResponse> {
+    fun handleExpiredJwtException(exception: ExpiredJwtException): ResponseEntity<ApiResponse> {
+        logger.warn("Expired JWT token: ${exception.message}")
         return createErrorResponse(ErrorCode.EXPIRED_TOKEN)
     }
 
-    // 공통 에러 응답 생성 메서드
+    // Catch-all for uncaught exceptions
+    @ExceptionHandler(Exception::class)
+    fun handleException(exception: Exception): ResponseEntity<ApiResponse> {
+        logger.error("Unhandled exception: ${exception} ${exception.message}", exception)
+        val errorCode = ErrorCode.fromException(exception)
+        return createErrorResponse(errorCode)
+    }
+
+    // Helper method to create consistent error responses
     private fun createErrorResponse(errorCode: ErrorCode): ResponseEntity<ApiResponse> {
-        val response = ApiResponse.error(errorCode)
-        return ResponseEntity.status(HttpStatus.valueOf(errorCode.status)).body(response)
+        return ResponseEntity.status(errorCode.status).body(errorCode.toApiResponse())
     }
 }
