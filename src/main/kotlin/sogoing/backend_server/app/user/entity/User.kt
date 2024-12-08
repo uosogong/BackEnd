@@ -2,6 +2,7 @@ package sogoing.backend_server.app.user.entity
 
 import jakarta.persistence.*
 import jakarta.validation.constraints.Email
+import org.hibernate.annotations.SQLRestriction
 import org.springframework.security.crypto.password.PasswordEncoder
 import sogoing.backend_server.app.auth.dto.SignUpRequest
 import sogoing.backend_server.app.department.entity.Department
@@ -10,6 +11,7 @@ import sogoing.backend_server.app.resume.entity.Resume
 import sogoing.backend_server.common.entity.SoftDeleteEntity
 
 @Entity
+@SQLRestriction("deleted_at is null")
 @Table(name = "users")
 class User(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) var id: Long? = null,
