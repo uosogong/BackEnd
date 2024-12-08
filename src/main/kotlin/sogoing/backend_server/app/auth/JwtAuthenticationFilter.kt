@@ -1,6 +1,5 @@
 package sogoing.backend_server.app.auth
 
-import io.jsonwebtoken.MalformedJwtException
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
@@ -29,24 +28,21 @@ class JwtAuthenticationFilter(private val tokenProvider: TokenProvider) : OncePe
                 .apply { details = WebAuthenticationDetails(request) }
                 .also { SecurityContextHolder.getContext().authentication = it }
         } catch (e: Exception) {
-            SecurityContextHolder.clearContext()
             request.setAttribute("exception", e)
-            throw e
         }
 
         filterChain.doFilter(request, response)
     }
 
-    private fun parseBearerToken(request: HttpServletRequest): String? =
+    private fun parseBearerToken(request: HttpServletRequest) =
         request
             .getHeader(HttpHeaders.AUTHORIZATION)
-            ?.takeIf { it.startsWith("Bearer ", true) }
+            .takeIf { it?.startsWith("Bearer ", true) ?: false }
             ?.substring(7)
 
-    private fun parseUserSpecification(token: String?): User =
-        token
-            ?.let { tokenProvider.validateTokenAndGetSubject(it) }
-            ?.split(":")
-            ?.let { User(it[0], "", listOf(SimpleGrantedAuthority(it[1]))) }
-            ?: throw MalformedJwtException("Token parsing failed")
+    private fun parseUserSpecification(token: String?) =
+        (token?.takeIf { it.length >= 10 }?.let { tokenProvider.validateTokenAndGetSubject(it) }
+                ?: "0:anonymous")
+            .split(":")
+            .let { User(it[0], "", listOf(SimpleGrantedAuthority(it[1]))) }
 }

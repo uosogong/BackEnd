@@ -178,10 +178,11 @@ class DatabaseInitializer(
             val departments: MutableList<Department> = mutableListOf()
             val adminUsers: MutableList<User> = mutableListOf()
             // Access the departments
+            var count = 1
             for (departmentNode in departmentsNode) {
                 val name = departmentNode.path("name").asText()
                 val introduction = departmentNode.path("introduction").asText()
-                val user = makeAdminUser(name)
+                val user = makeAdminUser("department${count}")
                 adminUsers.add(user)
                 val department =
                     Department(
@@ -192,6 +193,7 @@ class DatabaseInitializer(
                         user = user
                     )
                 departments.add(department)
+                count++
             }
             userRepository.saveAll(adminUsers)
             return departmentRepository.saveAll(departments)
