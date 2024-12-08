@@ -11,7 +11,7 @@ import sogoing.backend_server.app.resume.entity.Resume
 import sogoing.backend_server.common.entity.SoftDeleteEntity
 
 @Entity
-@SQLRestriction("deleted_at is null")
+@SQLRestriction("deleted_date is null")
 @Table(name = "users")
 class User(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) var id: Long? = null,
