@@ -22,6 +22,7 @@ class Resume(
     var email: String,
     var schedule: String,
     var content: String,
+    var birthday: String,
 ) : BaseEntity() {
     companion object {
         fun from(request: ResumeCreateRequest, department: Department, user: User) =
@@ -38,6 +39,7 @@ class Resume(
                 email = request.email,
                 schedule = request.schedule,
                 content = request.content,
+                birthday = request.birthday,
             )
     }
 }

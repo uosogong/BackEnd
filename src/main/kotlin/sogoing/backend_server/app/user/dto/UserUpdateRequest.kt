@@ -5,7 +5,9 @@ data class UserUpdateRequest(
     val address: String?,
     val email: String?,
     val phone: String?,
+    val birthday: String?,
     val departmentName: String?,
     val schedule: String?,
     val studentId: String?,
+    val password: String?,
 )
