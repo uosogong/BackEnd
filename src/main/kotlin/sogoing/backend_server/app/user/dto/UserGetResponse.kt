@@ -23,7 +23,7 @@ data class UserGetResponse(
                 email = user.email,
                 phone = user.phone,
                 role = user.role,
-                departmentName = user.department?.name,
+                departmentName = user.departmentName,
                 schedule = user.schedule,
                 studentId = user.studentId
             )

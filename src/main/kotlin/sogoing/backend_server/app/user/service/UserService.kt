@@ -36,9 +36,7 @@ class UserService(
             email = updateRequest.email ?: email
             studentId = updateRequest.studentId ?: studentId
             birthday = updateRequest.birthday ?: birthday
-            department =
-                updateRequest.departmentName?.let { departmentService.getDepartmentByName(it) }
-                    ?: department
+            departmentName = updateRequest.departmentName ?: departmentName
             schedule = updateRequest.schedule ?: schedule
             password = encoder.encode(updateRequest.password) ?: password
         }

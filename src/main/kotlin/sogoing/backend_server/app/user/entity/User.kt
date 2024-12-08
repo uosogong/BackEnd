@@ -21,6 +21,7 @@ class User(
     var name: String? = null,
     var schedule: String? = null,
     var birthday: String? = null,
+    var departmentName: String? = null,
     var studentId: String? = null,
     @Email var email: String? = null,
     var password: String? = null,
