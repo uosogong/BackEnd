@@ -4,6 +4,8 @@ import java.time.LocalDateTime
 import sogoing.backend_server.app.resume.entity.Resume
 
 data class ResumeGetResponse(
+    val isScholarshipResume: Boolean,
+    val isInternResume: Boolean,
     val phone: String,
     val address: String,
     val workplace: String,
@@ -17,6 +19,8 @@ data class ResumeGetResponse(
     companion object {
         fun from(resume: Resume): ResumeGetResponse {
             return ResumeGetResponse(
+                isScholarshipResume = resume.isScholarshipResume,
+                isInternResume = resume.isInternResume,
                 phone = resume.phone,
                 address = resume.address,
                 workplace = resume.workplace,
