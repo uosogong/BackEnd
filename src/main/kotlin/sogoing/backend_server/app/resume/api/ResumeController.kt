@@ -36,4 +36,15 @@ class ResumeController(private val resumeService: ResumeService) {
             )
         )
     }
+
+    @GetMapping("/me")
+    fun findMyResumes(
+        @AuthenticationPrincipal userDetails: UserDetails,
+    ): ApiResponse {
+        return ApiResponse.success(
+            resumeService.findMyResume(
+                userDetails.username.toLong(),
+            )
+        )
+    }
 }

@@ -46,4 +46,16 @@ class ResumeService(
 
         return resumes.stream().map(ResumeGetResponse::from).toList()
     }
+
+    fun findMyResume(
+        userId: Long,
+    ): List<ResumeGetResponse> {
+        val resumes = resumeRepository.findAllByUserId(userId)
+
+        if (resumes.isNullOrEmpty()) {
+            return emptyList()
+        }
+
+        return resumes.stream().map(ResumeGetResponse::from).toList()
+    }
 }
