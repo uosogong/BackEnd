@@ -44,9 +44,7 @@ class ResumeService(
             )
                 ?: throw EntityNotFoundException()
 
-        val user = userService.getUserById(userId)
-
-        return resumes.stream().map { r -> ResumeGetResponse.from(r, user) }.toList()
+        return resumes.stream().map { r -> ResumeGetResponse.from(r) }.toList()
     }
 
     fun findMyResume(
