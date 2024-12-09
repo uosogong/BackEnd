@@ -51,6 +51,9 @@ dependencies {
 	// querydsl
 	implementation("com.querydsl:querydsl-jpa:5.0.0:jakarta")
 	kapt("com.querydsl:querydsl-apt:5.0.0:jakarta")
+
+	//test
+	testImplementation("io.mockk:mockk:1.13.8")
 }
 
 kotlin {

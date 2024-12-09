@@ -24,10 +24,30 @@ data class ResumeGetResponse(
     companion object {
         fun from(resume: Resume, user: User): ResumeGetResponse {
             return ResumeGetResponse(
-                name = user.name,
+                name = resume.department.name,
                 birthday = user.birthday,
                 studentId = user.studentId,
                 departmentName = user.departmentName,
+                isScholarshipResume = resume.isScholarshipResume,
+                isInternResume = resume.isInternResume,
+                phone = resume.phone,
+                address = resume.address,
+                workplace = resume.workplace,
+                totalWorkSemester = resume.totalWorkSemester,
+                otherScholarship = resume.otherScholarship,
+                email = resume.email,
+                schedule = resume.schedule,
+                content = resume.content,
+                createdDate = resume.createdDate!!
+            )
+        }
+
+        fun from(resume: Resume): ResumeGetResponse {
+            return ResumeGetResponse(
+                name = resume.user.name,
+                birthday = resume.birthday,
+                studentId = resume.user.studentId,
+                departmentName = resume.user.departmentName,
                 isScholarshipResume = resume.isScholarshipResume,
                 isInternResume = resume.isInternResume,
                 phone = resume.phone,
