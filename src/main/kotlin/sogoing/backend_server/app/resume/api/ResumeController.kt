@@ -4,7 +4,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.web.bind.annotation.*
 import sogoing.backend_server.app.resume.dto.ResumeCreateRequest
-import sogoing.backend_server.app.resume.dto.ResumeGetRequest
 import sogoing.backend_server.app.resume.service.ResumeService
 import sogoing.backend_server.common.error.ApiResponse
 
@@ -26,10 +25,15 @@ class ResumeController(private val resumeService: ResumeService) {
     @GetMapping
     fun findResume(
         @AuthenticationPrincipal userDetails: UserDetails,
-        @RequestParam requestBody: ResumeGetRequest,
+        @RequestParam isScholarshipResume: Boolean,
+        @RequestParam isInternResume: Boolean,
     ): ApiResponse {
         return ApiResponse.success(
-            resumeService.findResume(userDetails.username.toLong(), requestBody)
+            resumeService.findResume(
+                userDetails.username.toLong(),
+                isScholarshipResume,
+                isInternResume
+            )
         )
     }
 }
