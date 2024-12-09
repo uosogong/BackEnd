@@ -26,8 +26,8 @@ class ResumeController(private val resumeService: ResumeService) {
     @GetMapping
     fun findResume(
         @AuthenticationPrincipal userDetails: UserDetails,
-        @RequestBody request: ResumeGetRequest,
+        @RequestParam requestBody: ResumeGetRequest,
     ): ApiResponse {
-        return ApiResponse.success(resumeService.findResume(userDetails.username.toLong(), request))
+        return ApiResponse.success(resumeService.findResume(userDetails.username.toLong(), requestBody))
     }
 }
