@@ -28,6 +28,8 @@ class ResumeController(private val resumeService: ResumeService) {
         @AuthenticationPrincipal userDetails: UserDetails,
         @RequestParam requestBody: ResumeGetRequest,
     ): ApiResponse {
-        return ApiResponse.success(resumeService.findResume(userDetails.username.toLong(), requestBody))
+        return ApiResponse.success(
+            resumeService.findResume(userDetails.username.toLong(), requestBody)
+        )
     }
 }
