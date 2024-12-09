@@ -43,6 +43,9 @@ class AuthService(
     private fun signResponse(user: User): SignResponse {
         val token = tokenProvider.createToken("${user.id}:${user.role}")
 
-        return SignResponse(user.name, user.role, token)
+        user.department?.let {
+            return SignResponse(user.name, user.role, user.department!!.id, token)
+        }
+        return SignResponse(user.name, user.role, null, token)
     }
 }
