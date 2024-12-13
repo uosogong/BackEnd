@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito.*
-import org.springframework.boot.test.context.SpringBootTest
 import sogoing.backend_server.app.department.entity.Department
 import sogoing.backend_server.app.department.repository.DepartmentRepository
 import sogoing.backend_server.app.dib.dto.DibStatusResponse
