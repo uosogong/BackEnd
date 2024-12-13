@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito.*
-import org.springframework.boot.test.context.SpringBootTest
 import sogoing.backend_server.app.department.entity.Department
 import sogoing.backend_server.app.department.repository.DepartmentRepository
 import sogoing.backend_server.app.dib.dto.DibStatusResponse
@@ -14,7 +13,6 @@ import sogoing.backend_server.app.feedback.dto.FeedbackResponseDto
 import sogoing.backend_server.app.feedback.service.FeedbackService
 import sogoing.backend_server.app.user.entity.User
 
-@SpringBootTest
 class DepartmentServiceTest {
     private val departmentRepository: DepartmentRepository = mockk()
     private val dibService: DibService = mockk()
@@ -42,7 +40,7 @@ class DepartmentServiceTest {
     }
 
     @Test
-    fun `should return department list with ratings and dibs`() {
+    fun `부서 중, D-Day가 존재하지 않는 부서는 -1로 응답한다`() {
         val mockuser1 = mockk<User>()
         val mockuser2 = mockk<User>()
         // Arrange
@@ -78,7 +76,6 @@ class DepartmentServiceTest {
 
         // Assert
         assertEquals(2, result.departments.size)
-        //        assertEquals(3.5F, result.departments[0])
-        //        assertEquals(true, result.departments[0].isUserDibs)
+        assertEquals(-1, result.departments[0].content.leftDays)
     }
 }
